@@ -13,6 +13,67 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+    seal: false
+---
+class: center, inverse, middle 
+
+```{css echo=FALSE}
+.highlight-last-item > ul > li, 
+.highlight-last-item > ol > li {
+  opacity: 0.5;
+}
+.highlight-last-item > ul > li:last-of-type,
+.highlight-last-item > ol > li:last-of-type {
+  opacity: 1;
+}
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+```
+
+```{r xaringan-animate-all, echo=FALSE, eval=FALSE}
+xaringanExtra::use_animate_all("slide_left")
+```
+
+```{r xaringan-tachyons, echo=FALSE}
+xaringanExtra::use_tachyons()
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "images/sdsu.png",
+  link_url = "https://github.com/villegar/presentations/tree/master/2020-07"
+)
+```
+
+# 10 años de Universidad
+## ¿qué ha pasado?
+
+<!-- .center[![uor](images/uor.png)![](images/sdsu.png)] -->
+
+---
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
+The only way to write good code is to write tons of shitty code first. 
+Feeling shame about bad code stops you from getting to good code
+
+.tr[
+— Hadley Wickham
+]]
+---
+class: highlight-last-item
+
+# Best Brownies, Ingredients
+
+$y = b + mx$
+
+--
+
+- 2 large eggs
+
+--
+
+- ... more list items...
 ---
 
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
