@@ -1,8 +1,8 @@
 ---
 title: "10 años de Universidad"
-subtitle: "¿qué ha pasado?"
+subtitle: ""
 author: "Roberto Villegas-Diaz"
-institute: ""
+institute: "South Dakota State University"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -15,7 +15,7 @@ output:
       countIncrementalSlides: false
     seal: false
 ---
-class: center, inverse, middle 
+class: center, middle 
 
 ```{css echo=FALSE}
 .highlight-last-item > ul > li, 
@@ -43,16 +43,59 @@ xaringanExtra::use_tachyons()
 ```{r xaringan-logo, echo=FALSE}
 xaringanExtra::use_logo(
   image_url = "images/sdsu.png",
-  link_url = "https://github.com/villegar/presentations/tree/master/2020-07"
+  link_url = "https://github.com/villegar/presentations/tree/master/2020-07",
+  position = xaringanExtra::css_position(bottom = "0em", left = "1em")
 )
 ```
 
-# 10 años de Universidad
-## ¿qué ha pasado?
+```{css, echo = FALSE}
+.main_footer {
+  align: center;
+}
+.main_footer img{
+  max-width: 250px;
+  height: 100px;
+  float: left;
+  vertical-align: middle;
+  margin: 10;
+}
+```
 
+# 10 años de Universidad
+## Mi experiencia
+<br />
+<br />
+<br />
+### Roberto Villegas-Diaz
+<!-- <img src="images/ucr-2.png" style="height: 150px; vertical-align: bottom"/>  -->
+<!-- <span style="font-size: 150px;">|</span> -->
+<!-- <img src="images/sdsu-2.png" style="height: 150px; vertical-align: bottom"/>  -->
+<!-- <span style="font-size: 150px;">|</span> -->
+<!-- <img src="images/uor_shield.png" style="height: 150px; vertical-align: bottom"/> -->
+<!-- ## ¿cómo, por qué, para qué? -->
+<!-- <div class="main_footer"> -->
+<!-- ![](images/ucr-2.png) -->
+<!-- ![](images/sdsu.png) -->
+<!-- ![uor](images/uor_shield.png) -->
+<!-- </div> -->
 <!-- .center[![uor](images/uor.png)![](images/sdsu.png)] -->
 
 ---
+# Contenidos
+- Práctica empresarial
+
+- CIGEFI: Centro de Investigaciones Geofísicas
+
+- Beca CRUSA
+
+- NOAA-GLERL: Laboratorio de Investigación Ambiental de los Grandes Lagos 
+
+- ACM/IEEE Conferencia de Supercomputación (SC18 y SC19)
+
+- SIMMAC: Simposio Internacional de Métodos Matemáticos Aplicados a las Ciencias
+
+---
+<br >
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 The only way to write good code is to write tons of shitty code first. 
 Feeling shame about bad code stops you from getting to good code
@@ -60,207 +103,107 @@ Feeling shame about bad code stops you from getting to good code
 .tr[
 — Hadley Wickham
 ]]
+
+---
+class: center, middle
+# Práctica empresarial
+
+.bg-washed-yellow.b--yellow.ba.bw2.br3.shadow-5.ph4.mt5[
+The only way to do great work is to love what you do. If you haven’t found 
+it yet, keep looking. Don’t settle. As with all matters of the heart, you’ll know when you find it.
+
+.tr[
+— Steve Jobs
+]]
+
+---
+
+## Wind Turbine Design Tool
+### (Abril $\sim$ Dic. 2014)
+.center[
+![adastra](images/AdAstra.png)
+]
+<!-- No se trata de elegir un proyecto fácil, pero una oportunidad para aplicar lo  -->
+<!-- aprendido en el aula. -->
+---
+# Práctica empresarial: Problema
+Automotizar el diseño de aerogeneradores
+.center[
+<img src="images/windturbine.png" style="height: 400px;" /><br>
+<span style="font-size: 12px">Cortesía de Ad Astra Rocket Company</span>
+<!-- ![windturbine](images/windturbine.png) -->
+]
+
+---
+# Práctica empresarial: Retos
+
+---
+class: center, middle
+# CIGEFI: Centro de Investigaciones Geofísicas
+.center[
+  <img src="images/cigefi.png" alt="cigefi" style="width: 300px" />
+]
+---
+
+---
+# CIGEFI [2]
+
+---
+class: center, middle
+# Beca CRUSA
+
+.center[
+  <img src="images/crusa.png" alt="crusa" style="width: 500px" />
+]
+
+---
+class: center, middle
+# NOAA-GLERL: Laboratorio de Investigación Ambiental de los Grandes Lagos 
+
+.center[
+  <img src="images/noaa.png" style="height: 150px; vertical-align: bottom"/> 
+  <span style="font-size: 150px;">|</span>
+  <img src="images/glerl.jpg" style="height: 150px; vertical-align: bottom"/>
+]
+
+---
+class: center, middle
+# ACM/IEEE Conferencia de Supercomputación (SC18 y SC19)
+
+.center[
+  <img src="images/sc18.png" style="height: 150px; vertical-align: bottom"/> 
+  <span style="font-size: 150px;">|</span>
+  <img src="images/sc19.png" style="height: 150px; vertical-align: bottom"/>
+]
+
+---
+class: center, middle
+# SIMMAC: Simposio Internacional de Métodos Matemáticos Aplicados a las Ciencias
+
+.center[
+  <img src="images/simmac19.jpg" style="height: 150px; vertical-align: bottom"/> 
+  <span style="font-size: 150px;">|</span>
+  <img src="images/simmac20.png" style="height: 150px; vertical-align: bottom"/>
+  <span style="font-size: 150px;">|</span>
+  <img src="images/simmac22.jpg" style="height: 150px; vertical-align: bottom"/>
+]
+
 ---
 class: highlight-last-item
 
-# Best Brownies, Ingredients
-
-$y = b + mx$
+# Listing
 
 --
 
-- 2 large eggs
+- Item 1
+
+--
+
+- Item 2
 
 --
 
 - ... more list items...
----
-
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
-
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
-```
-
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-library(xaringanthemer)
-style_mono_accent(
-  base_color = "#15446f", #307671",
-  header_font_google = google_font("Josefin Sans"),
-  text_font_google   = google_font("Montserrat", "300", "300i"),
-  code_font_google   = google_font("Fira Mono")
-)
-```
-
-???
-
-Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
-
----
-class: center, middle
-
-# xaringan
-
-### /ʃaː.'riŋ.ɡan/
-
----
-class: inverse, center, middle
-
-# Get Started
-
----
-
-# Hello World
-
-Install the **xaringan** package from [Github](https://github.com/yihui/xaringan):
-
-```{r eval=FALSE, tidy=FALSE}
-devtools::install_github("yihui/xaringan")
-```
-
---
-
-You are recommended to use the [RStudio IDE](https://www.rstudio.com/products/rstudio/), but you do not have to.
-
-- Create a new R Markdown document from the menu `File -> New File -> R Markdown -> From Template -> Ninja Presentation`;<sup>1</sup>
-
---
-
-- Click the `Knit` button to compile it;
-
---
-
-- or use the [RStudio Addin](https://rstudio.github.io/rstudioaddins/)<sup>2</sup> "Infinite Moon Reader" to live preview the slides (every time you update and save the Rmd document, the slides will be automatically reloaded in RStudio Viewer.
-
-.footnote[
-[1] 中文用户请看[这份教程](http://slides.yihui.org/xaringan/zh-CN.html)
-
-[2] See [#2](https://github.com/yihui/xaringan/issues/2) if you do not see the template or addin in RStudio.
-]
-
----
-background-image: url(`r xaringan:::karl`)
-background-position: 50% 50%
-class: center, bottom, inverse
-
-# You only live once!
-
----
-
-# Hello Ninja
-
-As a presentation ninja, you certainly should not be satisfied by the "Hello World" example. You need to understand more about two things:
-
-1. The [remark.js](https://remarkjs.com) library;
-
-1. The **xaringan** package;
-
-Basically **xaringan** injected the chakra of R Markdown (minus Pandoc) into **remark.js**. The slides are rendered by remark.js in the web browser, and the Markdown source needed by remark.js is generated from R Markdown (**knitr**).
-
----
-
-# remark.js
-
-You can see an introduction of remark.js from [its homepage](https://remarkjs.com). You should read the [remark.js Wiki](https://github.com/gnab/remark/wiki) at least once to know how to
-
-- create a new slide (Markdown syntax<sup>*</sup> and slide properties);
-
-- format a slide (e.g. text alignment);
-
-- configure the slideshow;
-
-- and use the presentation (keyboard shortcuts).
-
-It is important to be familiar with remark.js before you can understand the options in **xaringan**.
-
-.footnote[[*] It is different with Pandoc's Markdown! It is limited but should be enough for presentation purposes. Come on... You do not need a slide for the Table of Contents! Well, the Markdown support in remark.js [may be improved](https://github.com/gnab/remark/issues/142) in the future.]
-
----
-background-image: url(`r xaringan:::karl`)
-background-size: cover
-class: center, bottom, inverse
-
-# I was so happy to have discovered remark.js!
-
----
-class: inverse, middle, center
-
-# Using xaringan
-
----
-
-# xaringan
-
-Provides an R Markdown output format `xaringan::moon_reader` as a wrapper for remark.js, and you can use it in the YAML metadata, e.g.
-
-```yaml
----
-title: "A Cool Presentation"
-output:
-  xaringan::moon_reader:
-    yolo: true
-    nature:
-      autoplay: 30000
----
-```
-
-See the help page `?xaringan::moon_reader` for all possible options that you can use.
-
----
-
-# remark.js vs xaringan
-
-Some differences between using remark.js (left) and using **xaringan** (right):
-
-.pull-left[
-1. Start with a boilerplate HTML file;
-
-1. Plain Markdown;
-
-1. Write JavaScript to autoplay slides;
-
-1. Manually configure MathJax;
-
-1. Highlight code with `*`;
-
-1. Edit Markdown source and refresh browser to see updated slides;
-]
-
-.pull-right[
-1. Start with an R Markdown document;
-
-1. R Markdown (can embed R/other code chunks);
-
-1. Provide an option `autoplay`;
-
-1. MathJax just works;<sup>*</sup>
-
-1. Highlight code with `{{}}`;
-
-1. The RStudio addin "Infinite Moon Reader" automatically refreshes slides on changes;
-]
-
-.footnote[[*] Not really. See next page.]
-
----
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
 
 ---
 
@@ -518,169 +461,15 @@ Question: what does `highlight.output = c(TRUE, FALSE)` mean? (Hint: think about
 - If you used Google fonts in slides (the default theme uses _Yanone Kaffeesatz_, _Droid Serif_, and _Source Code Pro_), they won't work offline unless you download or install them locally. The Heroku app [google-webfonts-helper](https://google-webfonts-helper.herokuapp.com/fonts) can help you download fonts and generate the necessary CSS.
 
 ---
+class: center, middle
 
-# Macros
-
-- remark.js [allows users to define custom macros](https://github.com/yihui/xaringan/issues/80) (JS functions) that can be applied to Markdown text using the syntax `![:macroName arg1, arg2, ...]` or `![:macroName arg1, arg2, ...](this)`. For example, before remark.js initializes the slides, you can define a macro named `scale`:
-
-    ```js
-    remark.macros.scale = function (percentage) {
-      var url = this;
-      return '<img src="' + url + '" style="width: ' + percentage + '" />';
-    };
-    ```
-
-    Then the Markdown text
-
-    ```markdown
-    ![:scale 50%](image.jpg)
-    ```
-
-    will be translated to
-    
-    ```html
-    <img src="image.jpg" style="width: 50%" />
-    ```
-
----
-
-# Macros (continued)
-
-- To insert macros in **xaringan** slides, you can use the option `beforeInit` under the option `nature`, e.g.,
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          beforeInit: "macros.js"
-    ```
-
-    You save your remark.js macros in the file `macros.js`.
-
-- The `beforeInit` option can be used to insert arbitrary JS code before `remark.create()`. Inserting macros is just one of its possible applications.
-
----
-
-# CSS
-
-Among all options in `xaringan::moon_reader`, the most challenging but perhaps also the most rewarding one is `css`, because it allows you to customize the appearance of your slides using any CSS rules or hacks you know.
-
-You can see the default CSS file [here](https://github.com/yihui/xaringan/blob/master/inst/rmarkdown/templates/xaringan/resources/default.css). You can completely replace it with your own CSS files, or define new rules to override the default. See the help page `?xaringan::moon_reader` for more information.
-
----
-
-# CSS
-
-For example, suppose you want to change the font for code from the default "Source Code Pro" to "Ubuntu Mono". You can create a CSS file named, say, `ubuntu-mono.css`:
-
-```css
-@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
-
-.remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
-```
-
-Then set the `css` option in the YAML metadata:
-
-```yaml
-output:
-  xaringan::moon_reader:
-    css: ["default", "ubuntu-mono.css"]
-```
-
-Here I assume `ubuntu-mono.css` is under the same directory as your Rmd.
-
-See [yihui/xaringan#83](https://github.com/yihui/xaringan/issues/83) for an example of using the [Fira Code](https://github.com/tonsky/FiraCode) font, which supports ligatures in program code.
-
----
-
-# Themes
-
-Don't want to learn CSS? Okay, you can use some user-contributed themes. A theme typically consists of two CSS files `foo.css` and `foo-fonts.css`, where `foo` is the theme name. Below are some existing themes:
-
-```{r}
-names(xaringan:::list_css())
-```
-
----
-
-# Themes
-
-To use a theme, you can specify the `css` option as an array of CSS filenames (without the `.css` extensions), e.g.,
-
-```yaml
-output:
-  xaringan::moon_reader:
-    css: [default, metropolis, metropolis-fonts]
-```
-
-If you want to contribute a theme to **xaringan**, please read [this blog post](https://yihui.org/en/2017/10/xaringan-themes).
-
----
-class: inverse, middle, center
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/3/39/Naruto_Shiki_Fujin.svg)
-background-size: contain
-
-# Naruto
-
----
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
-background-size: 100px
-background-position: 90% 8%
-
-# Sharingan
-
-The R package name **xaringan** was derived<sup>1</sup> from **Sharingan**, a dōjutsu in the Japanese anime _Naruto_ with two abilities:
-
-- the "Eye of Insight"
-
-- the "Eye of Hypnotism"
-
-I think a presentation is basically a way to communicate insights to the audience, and a great presentation may even "hypnotize" the audience.<sup>2,3</sup>
+# ¡Muchas gracias!
 
 .footnote[
-[1] In Chinese, the pronounciation of _X_ is _Sh_ /ʃ/ (as in _shrimp_). Now you should have a better idea of how to pronounce my last name _Xie_.
-
-[2] By comparison, bad presentations only put the audience to sleep.
-
-[3] Personally I find that setting background images for slides is a killer feature of remark.js. It is an effective way to bring visual impact into your presentations.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Presentación creada usando el paquete de R [**xaringan**](https://github.com/yihui/xaringan).
 ]
 
 ---
-
-# Naruto terminology
-
-The **xaringan** package borrowed a few terms from Naruto, such as
-
-- [Sharingan](http://naruto.wikia.com/wiki/Sharingan) (写輪眼; the package name)
-
-- The [moon reader](http://naruto.wikia.com/wiki/Moon_Reader) (月読; an attractive R Markdown output format)
-
-- [Chakra](http://naruto.wikia.com/wiki/Chakra) (查克拉; the path to the remark.js library, which is the power to drive the presentation)
-
-- [Nature transformation](http://naruto.wikia.com/wiki/Nature_Transformation) (性質変化; transform the chakra by setting different options)
-
-- The [infinite moon reader](http://naruto.wikia.com/wiki/Infinite_Tsukuyomi) (無限月読; start a local web server to continuously serve your slides)
-
-- The [summoning technique](http://naruto.wikia.com/wiki/Summoning_Technique) (download remark.js from the web)
-
-You can click the links to know more about them if you want. The jutsu "Moon Reader" may seem a little evil, but that does not mean your slides are evil.
-
----
-
-class: center
-
-# Hand seals (印)
-
-Press `h` or `?` to see the possible ninjutsu you can use in remark.js.
-
-![](https://upload.wikimedia.org/wikipedia/commons/7/7e/Mudra-Naruto-KageBunshin.svg)
-
----
-
 class: center, middle
 
-# Thanks!
-
-Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
-
-The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.org/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
+# Preguntas.
