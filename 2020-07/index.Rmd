@@ -82,11 +82,13 @@ xaringanExtra::use_logo(
 
 ---
 # Contenidos
-- Práctica empresarial
+- Práctica Empresarial
 
 - CIGEFI: Centro de Investigaciones Geofísicas
 
 - Beca CRUSA
+
+- Entrenamiento y Desarrollo Profesional
 
 - NOAA-GLERL: Laboratorio de Investigación Ambiental de los Grandes Lagos 
 
@@ -95,6 +97,7 @@ xaringanExtra::use_logo(
 - SIMMAC: Simposio Internacional de Métodos Matemáticos Aplicados a las Ciencias
 
 ---
+class: center
 <br >
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 The only way to write good code is to write tons of shitty code first. 
@@ -117,25 +120,21 @@ it yet, keep looking. Don’t settle. As with all matters of the heart, you’ll
 ]]
 
 ---
-
 ## Wind Turbine Design Tool
-### (Abril $\sim$ Dic. 2014)
+### (Abril $\sim$ Diciembre 2014)
 .center[
 ![adastra](images/AdAstra.png)
 ]
-<!-- No se trata de elegir un proyecto fácil, pero una oportunidad para aplicar lo  -->
-<!-- aprendido en el aula. -->
 ---
-# Práctica empresarial: Problema
+## Problema
 Automotizar el diseño de aerogeneradores
 .center[
 <img src="images/windturbine.png" style="height: 400px;" /><br>
 <span style="font-size: 12px">Cortesía de Ad Astra Rocket Company</span>
-<!-- ![windturbine](images/windturbine.png) -->
 ]
 
 ---
-# Práctica empresarial: Retos
+## Retos
 
 ---
 class: center, middle
@@ -143,10 +142,9 @@ class: center, middle
 .center[
   <img src="images/cigefi.png" alt="cigefi" style="width: 300px" />
 ]
----
 
 ---
-# CIGEFI [2]
+## Proyectos
 
 ---
 class: center, middle
@@ -155,6 +153,60 @@ class: center, middle
 .center[
   <img src="images/crusa.png" alt="crusa" style="width: 500px" />
 ]
+
+---
+class: highlight-last-item
+## Recursos
+1. Chevening: [https://www.chevening.org](https://www.chevening.org/scholarship/costa-rica/)
+
+--
+
+2. EducationUSA: [https://educationusa.state.gov](https://educationusa.state.gov/centers/educationusa-advising-center-centro-cultural-costarricense-norteamericano)
+
+--
+
+3. Fullbright: [https://cr.usembassy.gov/](https://cr.usembassy.gov/education-culture/educational-exchange/fulbright-program/)
+
+--
+
+4. Jobbnorge: [https://www.jobbnorge.no](https://www.jobbnorge.no/search/en)
+
+--
+
+5. MICITT: https://www.micit.go.cr/becas
+
+---
+class: center, middle
+# Entrenamiento y Desarrollo Profesional
+
+---
+class: highlight-last-item
+## Recursos
+1. Coursera: https://www.coursera.org
+
+--
+
+2. edX: https://www.edx.org
+
+--
+
+3. Kabré - CeNAT: https://kabre.cenat.ac.cr
+--
+
+4. Kaggle: https://www.kaggle.com
+
+---
+class: highlight-last-item
+## Escuelas de Verano y Conferencias
+1. International HPC Summer School: http://www.ihpcss.org
+
+--
+
+2. PEARC: https://pearc.acm.org
+
+--
+
+3. SC Conference: http://supercomputing.org
 
 ---
 class: center, middle
@@ -187,81 +239,6 @@ class: center, middle
   <span style="font-size: 150px;">|</span>
   <img src="images/simmac22.jpg" style="height: 150px; vertical-align: bottom"/>
 ]
-
----
-class: highlight-last-item
-
-# Listing
-
---
-
-- Item 1
-
---
-
-- Item 2
-
---
-
-- ... more list items...
-
----
-
-# R Code
-
-```{r comment='#'}
-# a boring regression
-fit = lm(dist ~ 1 + speed, data = cars)
-coef(summary(fit))
-dojutsu = c('地爆天星', '天照', '加具土命', '神威', '須佐能乎', '無限月読')
-grep('天', dojutsu, value = TRUE)
-```
-
----
-
-# R Plots
-
-```{r cars, fig.height=4, dev='svg'}
-par(mar = c(4, 4, 1, .1))
-plot(cars, pch = 19, col = 'darkgray', las = 1)
-abline(fit, lwd = 2)
-```
-
----
-
-# Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r}
-knitr::kable(head(iris), format = 'html')
-```
-
----
-
-# HTML Widgets
-
-I have not thoroughly tested HTML widgets against **xaringan**. Some may work well, and some may not. It is a little tricky.
-
-Similarly, the Shiny mode (`runtime: shiny`) does not work. I might get these issues fixed in the future, but these are not of high priority to me. I never turn my presentation into a Shiny app. When I need to demonstrate more complicated examples, I just launch them separately. It is convenient to share slides with other people when they are plain HTML/JS applications.
-
-See the next page for two HTML widgets.
-
----
-
-```{r out.width='100%', fig.height=6, eval=require('leaflet')}
-library(leaflet)
-leaflet() %>% addTiles() %>% setView(-93.65, 42.0285, zoom = 17)
-```
-
----
-
-```{r eval=require('DT'), tidy=FALSE}
-DT::datatable(
-  head(iris, 10),
-  fillContainer = FALSE, options = list(pageLength = 8)
-)
-```
 
 ---
 
