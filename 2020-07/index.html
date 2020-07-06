@@ -25,6 +25,10 @@ class: center, middle
 .highlight-last-item &gt; ol &gt; li:last-of-type {
   opacity: 1;
 }
+
+.padded {
+  padding-left: 70px
+}
 &lt;/style&gt;
 
 
@@ -175,8 +179,10 @@ Perfiles arodinámicos
  &lt;span style="font-size: 12px"&gt;Abdullah, A.; Fadhli, M; _Numerical study of military airfoils design for compressible flow_. Dec. 2017&lt;/span&gt;
 ]
 
-&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Archivos de texto con valores `\([-1,1]\)` &lt;br&gt;
-&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Base de datos: http://goo.gl/zMtNxG ∼ 1600
+.padded[
+  Archivos de texto con valores `\([-1,1]\)` &lt;br&gt;
+  Base de datos: http://goo.gl/zMtNxG ∼ 1600
+]
 
 ---
 ### Análisis aerodinámico: Modelado en 3D
@@ -186,8 +192,9 @@ Perfiles arodinámicos
  &lt;span style="font-size: 12px"&gt;Forrister, T.; Fadhli, M; _Analyzing Wind Turbine Blades with the Composite Materials Module_. Nov. 2018&lt;/span&gt;
 ]
 
-&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Un aspa está formada por multiples secciones, cada una de ellas puede 
-&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; tener diferentes perfiles aerodinámicos.
+.padded[
+  Un aspa está formada por multiples secciones, cada una de ellas puede tener diferentes perfiles aerodinámicos.
+]
 ---
 ### Análisis de aerogeneración
 
@@ -195,9 +202,10 @@ Perfiles arodinámicos
  &lt;img src="images/GL-PMG-500A-PMG-Power-Curve.jpg" alt="Curva de generación" style="width: 550px" /&gt;&lt;br&gt;
  &lt;span style="font-size: 12px"&gt;Windpower Products https://www.tlgwindpower.com/parts/PMA_500A.htm &lt;/span&gt;
 ]
-
-&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ¿Cómo uso esta curva (imagen) para analizar los resultados? &lt;br&gt;
-&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; **Interpolación**
+.padded[
+  ¿Cómo uso esta curva (imagen) para analizar los resultados? &lt;br&gt;
+  **Interpolación**
+]
 ---
 class: center, middle
 # CIGEFI: Centro de Investigaciones Geofísicas
@@ -208,6 +216,36 @@ class: center, middle
 ---
 ## Proyectos
 
+1. Análisis de datos del CMIP5 (Coupled Model Intercomparison Project Phase 5)
+
+2. Detección de Sistemas Convectivos de Mesoescala (MCS)
+
+---
+### Análisis de datos del CMIP5
+&lt;table&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Nombre &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Tamaño &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 12 TB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Resolución espacial &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.25 grados × 0.25 grados &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Cobertura temporal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1950 − 2005 historical 2006 − 2100 RCP &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Variables &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; tasmin, tasmax, precipitation &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 ---
 class: center, middle
 # Beca CRUSA
@@ -255,8 +293,6 @@ class: highlight-last-item
 3. Kabré - CeNAT: https://kabre.cenat.ac.cr
 --
 
-4. Kaggle: https://www.kaggle.com
-
 ---
 class: highlight-last-item
 ## Escuelas de Verano y Conferencias
@@ -303,99 +339,6 @@ class: center, middle
 ]
 
 ---
-
-# Some Tips
-
-- When you use the "Infinite Moon Reader" addin in RStudio, your R session will be blocked by default. You can click the red button on the right of the console to stop serving the slides, or use the _daemonized_ mode so that it does not block your R session. To do the latter, you can set the option
-
-    ```r
-    options(servr.daemon = TRUE)
-    ```
-    
-    in your current R session, or in `~/.Rprofile` so that it is applied to all future R sessions. I do the latter by myself.
-    
-    To know more about the web server, see the [**servr**](https://github.com/yihui/servr) package.
-
---
-
-- Do not forget to try the `yolo` option of `xaringan::moon_reader`.
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        yolo: true
-    ```
-
----
-
-# Some Tips
-
-- Slides can be automatically played if you set the `autoplay` option under `nature`, e.g. go to the next slide every 30 seconds in a lightning talk:
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          autoplay: 30000
-    ```
-
---
-
-- A countdown timer can be added to every page of the slides using the `countdown` option under `nature`, e.g. if you want to spend one minute on every page when you give the talk, you can set:
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          countdown: 60000
-    ```
-
-    Then you will see a timer counting down from `01:00`, to `00:59`, `00:58`, ... When the time is out, the timer will continue but the time turns red.
-    
----
-
-# Some Tips
-
-- The title slide is created automatically by **xaringan**, but it is just another remark.js slide added before your other slides.
-
-    The title slide is set to `class: center, middle, inverse, title-slide` by default. You can change the classes applied to the title slide with the `titleSlideClass` option of `nature` (`title-slide` is always applied).
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          titleSlideClass: [top, left, inverse]
-    ```
-    
---
-
-- If you'd like to create your own title slide, disable **xaringan**'s title slide with the `seal = FALSE` option of `moon_reader`.
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        seal: false
-    ```
-
----
-
-# Some Tips
-
-- There are several ways to build incremental slides. See [this presentation](https://slides.yihui.org/xaringan/incremental.html) for examples.
-
-- The option `highlightLines: true` of `nature` will highlight code lines that start with `*`, or are wrapped in `{{ }}`, or have trailing comments `#&lt;&lt;`;
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          highlightLines: true
-    ```
-
-    See examples on the next page.
-
----
-
 # Some Tips
 
 
@@ -439,92 +382,19 @@ if (TRUE) {
 ## Very important!
 ```
 
-It is valid R code so you can run it. Note that `{{}}` can wrap an R expression of multiple lines.
-]
-
----
-
-# Some Tips
-
-An example of using the trailing comment `#&lt;&lt;` to highlight lines:
-
-````markdown
-```{r tidy=FALSE}
-library(ggplot2)
-ggplot(mtcars) + 
-  aes(mpg, disp) + 
-  geom_point() +   #&lt;&lt;
-  geom_smooth()    #&lt;&lt;
-```
-````
-
-Output:
-
-
-```r
-library(ggplot2)
-ggplot(mtcars) + 
-  aes(mpg, disp) + 
-* geom_point() +
-* geom_smooth()
-```
-
----
-
-# Some Tips
-
-When you enable line-highlighting, you can also use the chunk option `highlight.output` to highlight specific lines of the text output from a code chunk. For example, `highlight.output = TRUE` means highlighting all lines, and `highlight.output = c(1, 3)` means highlighting the first and third line.
-
-````md
-```{r, highlight.output=c(1, 3)}
-head(iris)
-```
-````
-
-
-```
-*##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-## 1          5.1         3.5          1.4         0.2  setosa
-*## 2          4.9         3.0          1.4         0.2  setosa
-## 3          4.7         3.2          1.3         0.2  setosa
-## 4          4.6         3.1          1.5         0.2  setosa
-## 5          5.0         3.6          1.4         0.2  setosa
-## 6          5.4         3.9          1.7         0.4  setosa
-```
-
-Question: what does `highlight.output = c(TRUE, FALSE)` mean? (Hint: think about R's recycling of vectors)
-
----
-
-# Some Tips
-
-- To make slides work offline, you need to download a copy of remark.js in advance, because **xaringan** uses the online version by default (see the help page `?xaringan::moon_reader`).
-
-- You can use `xaringan::summon_remark()` to download the latest or a specified version of remark.js. By default, it is downloaded to `libs/remark-latest.min.js`.
-
-- Then change the `chakra` option in YAML to point to this file, e.g.
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        chakra: libs/remark-latest.min.js
-    ```
-
-- If you used Google fonts in slides (the default theme uses _Yanone Kaffeesatz_, _Droid Serif_, and _Source Code Pro_), they won't work offline unless you download or install them locally. The Heroku app [google-webfonts-helper](https://google-webfonts-helper.herokuapp.com/fonts) can help you download fonts and generate the necessary CSS.
-
 ---
 class: center, middle
 
 # ¡Muchas gracias!
 
-.footnote[
-&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Presentación creada usando el paquete de R [**xaringan**](https://github.com/yihui/xaringan).
-]
+.footnote[.padded[
+  Presentación creada usando el paquete de R [**xaringan**](https://github.com/yihui/xaringan).
+]]
 
 ---
 class: center, middle
 
-# Preguntas.
+# ¿Preguntas?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
