@@ -4,7 +4,7 @@
     <title>10 años de Universidad</title>
     <meta charset="utf-8" />
     <meta name="author" content="Roberto Villegas-Diaz" />
-    <meta name="date" content="2020-06-22" />
+    <meta name="date" content="2020-07-06" />
     <link href="libs/tile-view-0.0.14/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.0.14/tile-view.js"></script>
     <link href="libs/tachyons-4.11.1/tachyons.min.css" rel="stylesheet" />
@@ -95,8 +95,7 @@ class: center, middle
 - SIMMAC: Simposio Internacional de Métodos Matemáticos Aplicados a las Ciencias
 
 ---
-class: center
-&lt;br &gt;
+class: center, middle
 .bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt5[
 The only way to write good code is to write tons of shitty code first. 
 Feeling shame about bad code stops you from getting to good code
@@ -104,7 +103,10 @@ Feeling shame about bad code stops you from getting to good code
 .tr[
 — Hadley Wickham
 ]]
-
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
 ---
 class: center, middle
 # Práctica empresarial
@@ -120,6 +122,7 @@ it yet, keep looking. Don’t settle. As with all matters of the heart, you’ll
 ---
 ## Wind Turbine Design Tool
 ### (Abril `\(\sim\)` Diciembre 2014)
+&lt;br&gt;
 .center[
 ![adastra](images/AdAstra.png)
 ]
@@ -133,7 +136,68 @@ Automotizar el diseño de aerogeneradores
 
 ---
 ## Retos
+1. Cálculos en `\(\mathbb{C}\)`
+2. Análisis aerodinámico
 
+  - Teorías de diseño aerodinámico
+  - Curvas parámetricas
+  - Modelado en 3D
+  
+3. Análisis de aerogeneración
+
+---
+### Cálculos en `\(\mathbb{C}\)`
+Es una representación geométrica de los números complejos establecida por un eje real y un eje imaginario.
+.center[
+ &lt;img src="images/complex-number.png" alt="plano complejo" style="width: 250px" /&gt;&lt;br&gt;
+ &lt;span style="font-size: 12px"&gt;Wolfkeeper at English Wikipedia / [CC BY-SA](https://creativecommons.org/licenses/by-sa/3.0)&lt;/span&gt;
+]
+¿Por qué usar números complejos?
+`$$x^2 + a = 0 \qquad a \in \mathbb{R}^+$$`
+---
+### Análisis aerodinámico: Teorías de diseño aerodinámico
+
+- Optimal Design Variable Speed 
+- Schmitz and Gundtoft
+- Uniform Taper
+
+Definición típica de un aspa
+.center[
+ &lt;img src="images/typical-airfoil-data.png" alt="plano complejo" style="width: 600px" /&gt;&lt;br&gt;
+ &lt;span style="font-size: 12px"&gt;Gundtoft, S.; _Wind turbines_. University College of Århus. 2009 &lt;/span&gt;
+]
+
+---
+### Análisis aerodinámico: Curvas parámetricas
+Perfiles arodinámicos
+.center[
+ &lt;img src="images/airfoils.png" alt="Perfiles aerodinámicos" style="height: 400px" /&gt;&lt;br&gt;
+ &lt;span style="font-size: 12px"&gt;Abdullah, A.; Fadhli, M; _Numerical study of military airfoils design for compressible flow_. Dec. 2017&lt;/span&gt;
+]
+
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Archivos de texto con valores `\([-1,1]\)` &lt;br&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Base de datos: http://goo.gl/zMtNxG ∼ 1600
+
+---
+### Análisis aerodinámico: Modelado en 3D
+
+.center[
+ &lt;img src="images/wind-turbine-blade-geometry.png" alt="Geometría de aspa" style="width: 550px" /&gt;&lt;br&gt;
+ &lt;span style="font-size: 12px"&gt;Forrister, T.; Fadhli, M; _Analyzing Wind Turbine Blades with the Composite Materials Module_. Nov. 2018&lt;/span&gt;
+]
+
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Un aspa está formada por multiples secciones, cada una de ellas puede 
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; tener diferentes perfiles aerodinámicos.
+---
+### Análisis de aerogeneración
+
+.center[
+ &lt;img src="images/GL-PMG-500A-PMG-Power-Curve.jpg" alt="Curva de generación" style="width: 550px" /&gt;&lt;br&gt;
+ &lt;span style="font-size: 12px"&gt;Windpower Products https://www.tlgwindpower.com/parts/PMA_500A.htm &lt;/span&gt;
+]
+
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; ¿Cómo uso esta curva (imagen) para analizar los resultados? &lt;br&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; **Interpolación**
 ---
 class: center, middle
 # CIGEFI: Centro de Investigaciones Geofísicas
