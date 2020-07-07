@@ -385,6 +385,10 @@ class: center, middle
 ]
 
 ---
+background-image: url(images/1118-SCinet-sc19-17.jpg)
+background-size: cover
+
+---
 class: center, middle
 # SIMMAC: Simposio Internacional de Métodos Matemáticos Aplicados a las Ciencias
 
