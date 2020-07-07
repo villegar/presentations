@@ -247,7 +247,7 @@ __NetCDF:__ Network Common Data Form
 ]
 
 ---
-### Resultados
+### Climatologias
 .center[
   <img src="images/precip-cmip5.png" alt="Precipitación" style="width: 550px" /> 
   
@@ -280,23 +280,32 @@ class: center, middle
 ---
 class: highlight-last-item
 ## Recursos
-1. Chevening: [https://www.chevening.org](https://www.chevening.org/scholarship/costa-rica/)
+1. Chevening: [https://www.chevening.org](https://www.chevening.org/scholarship/costa-rica/)<br>
+Becas para el Reino Unido
 
 --
 
-2. EducationUSA: [https://educationusa.state.gov](https://educationusa.state.gov/centers/educationusa-advising-center-centro-cultural-costarricense-norteamericano)
+2. EducationUSA: [https://educationusa.state.gov](https://educationusa.state.gov/centers/educationusa-advising-center-centro-cultural-costarricense-norteamericano)<br>
+Becas para los Estados Unidos de América
 
 --
 
-3. Fullbright: [https://cr.usembassy.gov/](https://cr.usembassy.gov/education-culture/educational-exchange/fulbright-program/)
+3. Fullbright: [https://cr.usembassy.gov/](https://cr.usembassy.gov/education-culture/educational-exchange/fulbright-program/)<br>
+Becas para los Estados Unidos de América
 
 --
 
-4. Jobbnorge: [https://www.jobbnorge.no](https://www.jobbnorge.no/search/en)
+4. Jobbnorge: [https://www.jobbnorge.no](https://www.jobbnorge.no/search/en)<br>
+Postgrados y Trabajos en Noruega
 
 --
 
-5. MICITT: https://www.micit.go.cr/becas
+5. MetJobs: [Archivo](https://www.lists.rdg.ac.uk/archives/met-jobs/) -  [Suscripción](https://www.lists.rdg.ac.uk/mailman/listinfo/met-jobs)<br>
+Postgrados y Trabajos en Ciencias Atmósfericas
+--
+
+5. MICITT: https://www.micit.go.cr/becas<br>
+Financiamiento para Postgrados
 
 ---
 class: center, middle
@@ -314,22 +323,39 @@ class: highlight-last-item
 --
 
 3. Kabré - CeNAT: https://kabre.cenat.ac.cr
+
 --
 
+4. MetPy Mondays: [[YouTube](https://www.youtube.com/playlist?list=PLQut5OXpV-0ir4IdllSt1iEZKTwFBa7kO)]
+
+--
+
+5. R4DS: [[Slack](r4ds.io/join)]
+
+--
 ---
 class: highlight-last-item
 ## Escuelas de Verano y Conferencias
-1. International HPC Summer School: http://www.ihpcss.org
+1. ECMWF Summer of Weather Code (ESoWC): https://esowc.ecmwf.int [Remoto + Salario]
 
 --
 
-2. PEARC: https://pearc.acm.org
+2. Google Summer of Code: https://summerofcode.withgoogle.com [Remoto + Salario]
 
 --
 
-3. SC Conference: http://supercomputing.org
+3. International HPC Summer School: http://www.ihpcss.org [Financiado]
 
+--
+
+4. International Conference for High Performance Computing, Networking, Storage and Analysis (SC Conference): http://supercomputing.org [Financiado]
+
+--
+
+5. Practice & Experience in Advanced Research Computing
+Conference Series (PEARC): https://pearc.acm.org [Fondos disponibles]
 ---
+
 class: center, middle
 # NOAA-GLERL: Laboratorio de Investigación Ambiental de los Grandes Lagos 
 
