@@ -368,12 +368,20 @@ class: center, middle
 ]
 
 ---
-### Grandes Lagos
+### Grandes Lagos (1)
 - Lagos: Superior, Huron, Michigan, Erie, Ontario
-- Superficie: 244,106 $km^2$ $\sim$ 4.7 superficie de Costa Rica 
+- Superficie: 244,106 km<sup>2</sup> $\sim$ 4.7 superficie de Costa Rica 
 - $\sim$ 95% agua dulce USA
 .center[
   <img src="images/great-lakes.png" alt="Grandes Lagos" style=""/>
+]
+
+---
+### Grandes Lagos (2)
+.center[
+  <img src="images/great-lakes-summer.jpg" alt="Grandes Lagos en Verano" style="width: 350px" />
+  <img src="images/great-lakes-winter.jpg" alt="Grandes Lagos en Invierno" style="width: 350px" /><br>
+  <img src="images/ice-cover-1-1-2020.png" alt="Grandes Lagos - Cobertura de Hielo" style="width: 350px" />
 ]
 
 ---
