@@ -304,7 +304,7 @@ Postgrados y Trabajos en Noruega
 Postgrados y Trabajos en Ciencias Atmósfericas
 --
 
-5. MICITT: https://www.micit.go.cr/becas<br>
+6. MICITT: https://www.micit.go.cr/becas<br>
 Financiamiento para Postgrados
 
 ---
@@ -322,17 +322,19 @@ class: highlight-last-item
 
 --
 
-3. Kabré - CeNAT: https://kabre.cenat.ac.cr
+3. Kabré - CeNAT: https://kabre.cenat.ac.cr <br>
+Supercomputadora y Entrenamiento en Computación Avanzada
 
 --
 
-4. MetPy Mondays: [[YouTube](https://www.youtube.com/playlist?list=PLQut5OXpV-0ir4IdllSt1iEZKTwFBa7kO)]
+4. MetPy Mondays: [[YouTube](https://www.youtube.com/playlist?list=PLQut5OXpV-0ir4IdllSt1iEZKTwFBa7kO)] <br>
+Cursos cortos semanales de aplicaciones en Ciencias Atmosféricas.
 
 --
 
-5. R4DS: [[Slack](r4ds.io/join)]
+5. R4DS: [[Slack](r4ds.io/join)] <br>
+Comunidad de R enfocada en Análisis de Datos.
 
---
 ---
 class: highlight-last-item
 ## Escuelas de Verano y Conferencias
@@ -403,45 +405,6 @@ class: center, middle
 ---
 background-image: url(images/simmacXXII.jpg)
 background-size: cover
-
----
-# Some Tips
-
-
-.pull-left[
-An example using a leading `*`:
-
-    ```r
-    if (TRUE) {
-    ** message("Very important!")
-    }
-    ```
-Output:
-```r
-if (TRUE) {
-* message("Very important!")
-}
-```
-
-This is invalid R code, so it is a plain fenced code block that is not executed.
-]
-
-.pull-right[
-An example using `{{}}`:
-
-````
-`r ''````{r tidy=FALSE}
-if (TRUE) {
-*{{ message("Very important!") }}
-}
-```
-````
-Output:
-```{r tidy=FALSE}
-if (TRUE) {
-{{ message("Very important!") }}
-}
-```
 
 ---
 class: center, middle
