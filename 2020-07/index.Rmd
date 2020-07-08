@@ -427,3 +427,24 @@ class: center, middle
 class: center, middle
 
 # ¿Preguntas?
+
+---
+class: center, middle
+# Contacto
+
+Roberto Villegas-Diaz: <br>
+[contact@robertovillegas-diaz.com](mailto:contact@robertovillegas-diaz.com)
+<!-- [villegas.roberto@hotmail.com](mailto:villegas.roberto@hotmail.com) -->
+
+Github: [@villegar](https://github.com/villegar)
+
+Twitter: [@roberthillo](https://github.com/villegar)
+
+<img src="images/linkedin.png" alt="LinkedIn" style="width: 150px" /><br>
+<span style="font-size: 12px">LinkedIn</span>
+```{r, echo = FALSE, fig.width=3, eval=FALSE}
+library(qrcode)
+#png("qrplot.png")
+qrcode_gen("https://www.linkedin.com/in/roberthillo/")
+#dev.off()
+```
