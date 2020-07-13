@@ -71,7 +71,8 @@ xaringanExtra::use_logo(
 <br />
 <br />
 ### Roberto Villegas-Diaz
-#### 13 de Julio, 2020
+<h1 style="font-size: 25px">13 de Julio, 2020</h1>
+#### 
 
 ---
 # Contenidos
@@ -445,6 +446,10 @@ class: center, middle
 # Universidad Estatal de Dakota del Sur
 
 ---
+background-image: url(images/SD.png)
+background-size: cover
+
+---
 ## División de Redes e Investigación en Computación (UNRC)
 
 Supercomputador/clúster *Roaring Thunder* @ SDSU:
@@ -495,6 +500,26 @@ Imaginen un profesor con multiple asistentes, cada uno puede trabajar de manera 
 
 ---
 ## Departamento de Ciencia de Plantas: Laboratorio Fennell
+.pull-left[
+<img src="images/IMG_7089.jpeg" style="height: 380px"/>
+
+.padded[
+  Sitio web: https://fennell-lab.netlify.app
+]
+]
+.pull-right[
+<h1 style="font-size: 25px">¿Qué hacemos?</h1>
+- Estudiamos uvas &#127815;
+  - Comportamiento en condiciones climáticas extremas
+  - Crecimiento de hojas y raíces
+  - Frutos
+
+<h1 style="font-size: 25px">¿Y yo qué hago?</h1>
+- Automatizar flujos de trabajo existentes que requieren interacción.
+- Desarrollar flujos de trabajo que usen computación en paralelo. 
+  - Paquete de R: [`MetaPipe`](https://github.com/villegar/MetaPipe)
+- Y algunas veces, hasta configurar impresoras &#128584;
+]
 
 ---
 class: center, middle
