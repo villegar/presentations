@@ -4,7 +4,7 @@
     <title>10 años de Universidad</title>
     <meta charset="utf-8" />
     <meta name="author" content="Roberto Villegas-Diaz" />
-    <meta name="date" content="2020-07-07" />
+    <meta name="date" content="2020-07-12" />
     <link href="libs/tile-view-0.0.14/tile-view.css" rel="stylesheet" />
     <script src="libs/tile-view-0.0.14/tile-view.js"></script>
     <link href="libs/tachyons-4.11.1/tachyons.min.css" rel="stylesheet" />
@@ -69,24 +69,14 @@ class: center, middle
 &lt;br /&gt;
 &lt;br /&gt;
 ### Roberto Villegas-Diaz
-&lt;!-- &lt;img src="images/ucr-2.png" style="height: 150px; vertical-align: bottom"/&gt;  --&gt;
-&lt;!-- &lt;span style="font-size: 150px;"&gt;|&lt;/span&gt; --&gt;
-&lt;!-- &lt;img src="images/sdsu-2.png" style="height: 150px; vertical-align: bottom"/&gt;  --&gt;
-&lt;!-- &lt;span style="font-size: 150px;"&gt;|&lt;/span&gt; --&gt;
-&lt;!-- &lt;img src="images/uor_shield.png" style="height: 150px; vertical-align: bottom"/&gt; --&gt;
-&lt;!-- ## ¿cómo, por qué, para qué? --&gt;
-&lt;!-- &lt;div class="main_footer"&gt; --&gt;
-&lt;!-- ![](images/ucr-2.png) --&gt;
-&lt;!-- ![](images/sdsu.png) --&gt;
-&lt;!-- ![uor](images/uor_shield.png) --&gt;
-&lt;!-- &lt;/div&gt; --&gt;
-&lt;!-- .center[![uor](images/uor.png)![](images/sdsu.png)] --&gt;
+#### 13 de Julio, 2020
 
 ---
 # Contenidos
+
 - Práctica Empresarial
 
-- CIGEFI: Centro de Investigaciones Geofísicas
+- CIGEFI-UCR: Centro de Investigaciones Geofísicas
 
 - Beca CRUSA
 
@@ -97,6 +87,8 @@ class: center, middle
 - ACM/IEEE Conferencia de Supercomputación (SC18 y SC19)
 
 - SIMMAC: Simposio Internacional de Métodos Matemáticos Aplicados a las Ciencias
+
+- Universidad Estatal de Dakota del Sur (SDSU)
 
 ---
 class: center, middle
@@ -111,6 +103,17 @@ Feeling shame about bad code stops you from getting to good code
 &lt;br&gt;
 &lt;br&gt;
 &lt;br&gt;
+
+---
+class: center, middle
+&lt;h1 style="color:#FFCC00; font-size: 100px"&gt; &amp;#x26A0;Precaución&lt;/h1&gt;
+&lt;span style="font-size: 12px"&gt;La siguiente diapositiva contiene material gráfico que puede dejar daño permanente en sus retinas &amp;#128064;&lt;/span&gt;
+
+---
+background-image: url(images/2010.jpg)
+background-size: cover
+&lt;span style="font-size: 12px"&gt;Universidad de Costa Rica, Recinto de Santa Cruz, 2010&lt;/span&gt;
+
 ---
 class: center, middle
 # Práctica empresarial
@@ -133,7 +136,8 @@ it yet, keep looking. Don’t settle. As with all matters of the heart, you’ll
 
 ---
 ## Problema
-Automotizar el diseño de aerogeneradores
+Automatizar el diseño de aerogeneradores (turbinas eólicas)
+
 .center[
 &lt;img src="images/windturbine.png" style="height: 400px;" /&gt;&lt;br&gt;
 &lt;span style="font-size: 12px"&gt;Cortesía de Ad Astra Rocket Company&lt;/span&gt;
@@ -158,7 +162,11 @@ Es una representación geométrica de los números complejos establecida por un
  &lt;span style="font-size: 12px"&gt;Wolfkeeper at English Wikipedia / [CC BY-SA](https://creativecommons.org/licenses/by-sa/3.0)&lt;/span&gt;
 ]
 ¿Por qué usar números complejos?
-`$$x^2 + a = 0 \qquad a \in \mathbb{R}^+$$`
+&lt;!-- `$$x^2 + a = 0 \qquad a \in \mathbb{R}^+$$` --&gt;
+
+.padded[
+ [Transformada de Fourier](https://es.wikipedia.org/wiki/Transformada_de_Fourier).
+]
 
 ---
 ### Análisis aerodinámico: Teorías de diseño aerodinámico
@@ -224,6 +232,8 @@ class: center, middle
 
 2. Detección de Sistemas Convectivos de Mesoescala (MCS)
 
+3. Trabajo con otros set de datos meteorológicos
+
 ---
 ### Análisis de datos del CMIP5
 &lt;table&gt;
@@ -238,7 +248,7 @@ class: center, middle
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Resolución espacial &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 0.25 grados × 0.25 grados &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.25 grados × 0.25 grados ~ 27.75 km × 27.75 km &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Cobertura temporal &lt;/td&gt;
@@ -252,7 +262,7 @@ class: center, middle
 &lt;/table&gt;
 
 ¿Qué formato se usa para almacenar estos datos? &lt;br&gt;
-__NetCDF:__ Network Common Data Form
+[NetCDF](https://www.unidata.ucar.edu/software/netcdf/docs/): Network Common Data Form
 
 .center[
   &lt;img src="images/netcdf.png" alt="NetCDF" style="width: 400px" /&gt;&lt;br&gt;
@@ -260,11 +270,15 @@ __NetCDF:__ Network Common Data Form
 ]
 
 ---
-### Climatologias
+### Climatologías
 .center[
   &lt;img src="images/precip-cmip5.png" alt="Precipitación" style="width: 550px" /&gt; 
   
   &lt;img src="images/sst-cmip5.png" alt="Temperatura" style="width: 550px"/&gt;
+]
+
+.padded[
+  Anuales y estacionales y mensuales.
 ]
 
 ---
@@ -289,6 +303,10 @@ class: center, middle
 .center[
   &lt;img src="images/crusa.png" alt="crusa" style="width: 500px" /&gt;
 ]
+
+.footnote[.padded[.left[
+ Sitio web: https://crusa.cr
+]]]
 
 ---
 class: highlight-last-item
@@ -340,12 +358,16 @@ Supercomputadora y Entrenamiento en Computación Avanzada
 
 --
 
-4. MetPy Mondays: [[YouTube](https://www.youtube.com/playlist?list=PLQut5OXpV-0ir4IdllSt1iEZKTwFBa7kO)] &lt;br&gt;
+4. Khan Academy: https://www.khanacademy.org 
+
+--
+
+5. MetPy Mondays: [[YouTube](https://www.youtube.com/playlist?list=PLQut5OXpV-0ir4IdllSt1iEZKTwFBa7kO)] &lt;br&gt;
 Cursos cortos semanales de aplicaciones en Ciencias Atmosféricas.
 
 --
 
-5. R4DS: [[Slack](r4ds.io/join)] &lt;br&gt;
+6. R4DS: [[Slack](r4ds.io/join)] &lt;br&gt;
 Comunidad de R enfocada en Análisis de Datos.
 
 ---
@@ -383,10 +405,14 @@ class: center, middle
 ---
 ### Grandes Lagos (1)
 - Lagos: Superior, Huron, Michigan, Erie, Ontario
-- Superficie: 244,106 km&lt;sup&gt;2&lt;/sup&gt; `\(\sim\)` 4.7 superficie de Costa Rica 
+- Superficie: 244,079 km&lt;sup&gt;2&lt;/sup&gt; `\(\sim\)` 4.7 superficie de Costa Rica 
 - `\(\sim\)` 95% agua dulce USA
 .center[
   &lt;img src="images/great-lakes.png" alt="Grandes Lagos" style=""/&gt;
+]
+
+.padded[
+Más información: https://www.glerl.noaa.gov/education/ourlakes/lakes.html
 ]
 
 ---
@@ -429,12 +455,88 @@ background-size: cover
 
 ---
 class: center, middle
+# Universidad Estatal de Dakota del Sur
+
+---
+## División de Redes e Investigación en Computación (UNRC)
+
+Supercomputador/clúster *Roaring Thunder* @ SDSU:
+
+&lt;table&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 56 nodos generales &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 40 CPUs; 190 GB RAM &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 5 nodos de gran memoria &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 80 CPUs; 3 TB RAM &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 4 nodos gráficos &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 40 CPUs; 190 GB RAM; NVIDIA P100 &amp;amp; V100 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Procesador &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Almacenamiento &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; DDN GPFS 1.2 PB &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Total &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2800 CPUs; 26.4 TB &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+### ¿Cómo se ve y qué es un supercomputador?
+.pull-left[
+  ![](images/thunder.png)&lt;br&gt;
+  &lt;span style="font-size: 12px"&gt;SDSU Collegian/Brookings Register&lt;/span&gt;
+]
+
+.pull-right[
+&lt;h1 style="color:#FFCC00; font-size: 25px"&gt; &amp;#x26A0;Precaución: Analogía&lt;/h1&gt;
+
+Imaginen un profesor con multiple asistentes, cada uno puede trabajar de manera independiente (revisan-do tareas, monitoreando laborato-rios, etc.), **pero** de ser necesario, los asistentes pueden dividirse un mis-mo _trabajo_ y obtener resultados mucho más rápido. 
+
+&lt;h1 style="font-size: 25px"&gt; Definición&lt;/h1&gt;
+"... dispositivo informático con capacidades de cálculo superiores a las computadoras comunes y de escritorio y que son usadas con fines específicos." - [Alguién en Wikipedia](https://es.wikipedia.org/wiki/Supercomputadora)
+]
+
+---
+### ¿Qué se puede hacer con estos recursos?
+
+- Ensamblaje y anotación de genomas
+- Procesamiento de imágenes satelitales [por ejemplo: [Lansat](https://landsat.gsfc.nasa.gov)]
+- Simulaciones en 
+  - Dinámica de fluídos  
+  - Física de altas energías (nuclear, partículas)
+  - Interacción de compuestos químicos 
+- Y muchas más 
+
+### ¿Y yo qué hago?
+
+- Ayudar a investigadores a implementar sus flujos de trabajo.
+- Impartir clases en: lenguajes de programación, operación del clúster, administración y transferencia de datos, programación en paralelo, y otros
+- Mantenimiento de software: compilar y optmizar nuevas versiones, preparar casos de uso y documentación.
+
+---
+## Departamento de Ciencia de Plantas: Laboratorio Fennell
+
+---
+class: center, middle
 
 # ¡Muchas gracias!
 
-.footnote[.padded[
+.footnote[.padded[.left[
   Presentación creada usando el paquete de R [**xaringan**](https://github.com/yihui/xaringan).
-]]
+  
+  Si, el nombre de la librería es inspirado por [Naruto](https://en.wikipedia.org/wiki/Naruto).
+]]]
 
 ---
 class: center, middle
@@ -447,14 +549,13 @@ class: center, middle
 
 Roberto Villegas-Diaz: &lt;br&gt;
 [contact@robertovillegas-diaz.com](mailto:contact@robertovillegas-diaz.com)
-&lt;!-- [villegas.roberto@hotmail.com](mailto:villegas.roberto@hotmail.com) --&gt;
 
 Github: [@villegar](https://github.com/villegar)
 
 Twitter: [@roberthillo](https://twitter.com/roberthillo)
 
-&lt;img src="images/linkedin.png" alt="LinkedIn" style="width: 150px" /&gt;&lt;br&gt;
-&lt;span style="font-size: 12px"&gt;LinkedIn&lt;/span&gt;
+&lt;a href="https://www.linkedin.com/in/roberto-villegas-diaz"&gt;&lt;img src="images/linkedin.png" alt="LinkedIn" style="width: 150px" /&gt;&lt;br&gt;
+&lt;span style="font-size: 12px"&gt;LinkedIn&lt;/span&gt;&lt;/a&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

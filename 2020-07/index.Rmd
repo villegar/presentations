@@ -71,24 +71,14 @@ xaringanExtra::use_logo(
 <br />
 <br />
 ### Roberto Villegas-Diaz
-<!-- <img src="images/ucr-2.png" style="height: 150px; vertical-align: bottom"/>  -->
-<!-- <span style="font-size: 150px;">|</span> -->
-<!-- <img src="images/sdsu-2.png" style="height: 150px; vertical-align: bottom"/>  -->
-<!-- <span style="font-size: 150px;">|</span> -->
-<!-- <img src="images/uor_shield.png" style="height: 150px; vertical-align: bottom"/> -->
-<!-- ## ¿cómo, por qué, para qué? -->
-<!-- <div class="main_footer"> -->
-<!-- ![](images/ucr-2.png) -->
-<!-- ![](images/sdsu.png) -->
-<!-- ![uor](images/uor_shield.png) -->
-<!-- </div> -->
-<!-- .center[![uor](images/uor.png)![](images/sdsu.png)] -->
+#### 13 de Julio, 2020
 
 ---
 # Contenidos
+
 - Práctica Empresarial
 
-- CIGEFI: Centro de Investigaciones Geofísicas
+- CIGEFI-UCR: Centro de Investigaciones Geofísicas
 
 - Beca CRUSA
 
@@ -99,6 +89,8 @@ xaringanExtra::use_logo(
 - ACM/IEEE Conferencia de Supercomputación (SC18 y SC19)
 
 - SIMMAC: Simposio Internacional de Métodos Matemáticos Aplicados a las Ciencias
+
+- Universidad Estatal de Dakota del Sur (SDSU)
 
 ---
 class: center, middle
@@ -113,6 +105,17 @@ Feeling shame about bad code stops you from getting to good code
 <br>
 <br>
 <br>
+
+---
+class: center, middle
+<h1 style="color:#FFCC00; font-size: 100px"> &#x26A0;Precaución</h1>
+<span style="font-size: 12px">La siguiente diapositiva contiene material gráfico que puede dejar daño permanente en sus retinas &#128064;</span>
+
+---
+background-image: url(images/2010.jpg)
+background-size: cover
+<span style="font-size: 12px">Universidad de Costa Rica, Recinto de Santa Cruz, 2010</span>
+
 ---
 class: center, middle
 # Práctica empresarial
@@ -135,7 +138,8 @@ it yet, keep looking. Don’t settle. As with all matters of the heart, you’ll
 
 ---
 ## Problema
-Automotizar el diseño de aerogeneradores
+Automatizar el diseño de aerogeneradores (turbinas eólicas)
+
 .center[
 <img src="images/windturbine.png" style="height: 400px;" /><br>
 <span style="font-size: 12px">Cortesía de Ad Astra Rocket Company</span>
@@ -160,7 +164,11 @@ Es una representación geométrica de los números complejos establecida por un
  <span style="font-size: 12px">Wolfkeeper at English Wikipedia / [CC BY-SA](https://creativecommons.org/licenses/by-sa/3.0)</span>
 ]
 ¿Por qué usar números complejos?
-$$x^2 + a = 0 \qquad a \in \mathbb{R}^+$$
+<!-- $$x^2 + a = 0 \qquad a \in \mathbb{R}^+$$ -->
+
+.padded[
+ [Transformada de Fourier](https://es.wikipedia.org/wiki/Transformada_de_Fourier).
+]
 
 ---
 ### Análisis aerodinámico: Teorías de diseño aerodinámico
@@ -226,12 +234,14 @@ class: center, middle
 
 2. Detección de Sistemas Convectivos de Mesoescala (MCS)
 
+3. Trabajo con otros set de datos meteorológicos
+
 ---
 ### Análisis de datos del CMIP5
 ```{r, echo=FALSE}
 db <- rbind(c("Nombre", "NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP)"),
             c("Tamaño", "12 TB"),
-            c("Resolución espacial", "0.25 grados × 0.25 grados"),
+            c("Resolución espacial", "0.25 grados × 0.25 grados ~ 27.75 km × 27.75 km"),
             c("Cobertura temporal", "1950 − 2005 historical 2006 − 2100 RCP"),
             c("Variables", "tasmin, tasmax, precipitation")
            )
@@ -239,7 +249,7 @@ knitr::kable(db, "html")
 ```
 
 ¿Qué formato se usa para almacenar estos datos? <br>
-__NetCDF:__ Network Common Data Form
+[NetCDF](https://www.unidata.ucar.edu/software/netcdf/docs/): Network Common Data Form
 
 .center[
   <img src="images/netcdf.png" alt="NetCDF" style="width: 400px" /><br>
@@ -247,11 +257,15 @@ __NetCDF:__ Network Common Data Form
 ]
 
 ---
-### Climatologias
+### Climatologías
 .center[
   <img src="images/precip-cmip5.png" alt="Precipitación" style="width: 550px" /> 
   
   <img src="images/sst-cmip5.png" alt="Temperatura" style="width: 550px"/>
+]
+
+.padded[
+  Anuales y estacionales y mensuales.
 ]
 
 ---
@@ -276,6 +290,10 @@ class: center, middle
 .center[
   <img src="images/crusa.png" alt="crusa" style="width: 500px" />
 ]
+
+.footnote[.padded[.left[
+ Sitio web: https://crusa.cr
+]]]
 
 ---
 class: highlight-last-item
@@ -327,12 +345,16 @@ Supercomputadora y Entrenamiento en Computación Avanzada
 
 --
 
-4. MetPy Mondays: [[YouTube](https://www.youtube.com/playlist?list=PLQut5OXpV-0ir4IdllSt1iEZKTwFBa7kO)] <br>
+4. Khan Academy: https://www.khanacademy.org 
+
+--
+
+5. MetPy Mondays: [[YouTube](https://www.youtube.com/playlist?list=PLQut5OXpV-0ir4IdllSt1iEZKTwFBa7kO)] <br>
 Cursos cortos semanales de aplicaciones en Ciencias Atmosféricas.
 
 --
 
-5. R4DS: [[Slack](r4ds.io/join)] <br>
+6. R4DS: [[Slack](r4ds.io/join)] <br>
 Comunidad de R enfocada en Análisis de Datos.
 
 ---
@@ -370,10 +392,14 @@ class: center, middle
 ---
 ### Grandes Lagos (1)
 - Lagos: Superior, Huron, Michigan, Erie, Ontario
-- Superficie: 244,106 km<sup>2</sup> $\sim$ 4.7 superficie de Costa Rica 
+- Superficie: 244,079 km<sup>2</sup> $\sim$ 4.7 superficie de Costa Rica 
 - $\sim$ 95% agua dulce USA
 .center[
   <img src="images/great-lakes.png" alt="Grandes Lagos" style=""/>
+]
+
+.padded[
+Más información: https://www.glerl.noaa.gov/education/ourlakes/lakes.html
 ]
 
 ---
@@ -416,12 +442,70 @@ background-size: cover
 
 ---
 class: center, middle
+# Universidad Estatal de Dakota del Sur
+
+---
+## División de Redes e Investigación en Computación (UNRC)
+
+Supercomputador/clúster *Roaring Thunder* @ SDSU:
+
+```{r, echo=FALSE}
+db <- rbind(c("56 nodos generales", "40 CPUs; 190 GB RAM"),
+            c("5 nodos de gran memoria", "80 CPUs; 3 TB RAM"),
+            c("4 nodos gráficos", "40 CPUs; 190 GB RAM; NVIDIA P100 & V100"),
+            c("Procesador", "Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz"),
+            c("Almacenamiento", "DDN GPFS 1.2 PB"),
+            c("Total", paste0(60*40 + 5*80, " CPUs; ", (60*190 + 5*3000)/1000, " TB"))
+           )
+knitr::kable(db, "html")
+```
+
+---
+### ¿Cómo se ve y qué es un supercomputador?
+.pull-left[
+  ![](images/thunder.png)<br>
+  <span style="font-size: 12px">SDSU Collegian/Brookings Register</span>
+]
+
+.pull-right[
+<h1 style="color:#FFCC00; font-size: 25px"> &#x26A0;Precaución: Analogía</h1>
+
+Imaginen un profesor con multiple asistentes, cada uno puede trabajar de manera independiente (revisan-do tareas, monitoreando laborato-rios, etc.), **pero** de ser necesario, los asistentes pueden dividirse un mis-mo _trabajo_ y obtener resultados mucho más rápido. 
+
+<h1 style="font-size: 25px"> Definición</h1>
+"... dispositivo informático con capacidades de cálculo superiores a las computadoras comunes y de escritorio y que son usadas con fines específicos." - [Alguién en Wikipedia](https://es.wikipedia.org/wiki/Supercomputadora)
+]
+
+---
+### ¿Qué se puede hacer con estos recursos?
+
+- Ensamblaje y anotación de genomas
+- Procesamiento de imágenes satelitales [por ejemplo: [Lansat](https://landsat.gsfc.nasa.gov)]
+- Simulaciones en 
+  - Dinámica de fluídos  
+  - Física de altas energías (nuclear, partículas)
+  - Interacción de compuestos químicos 
+- Y muchas más 
+
+### ¿Y yo qué hago?
+
+- Ayudar a investigadores a implementar sus flujos de trabajo.
+- Impartir clases en: lenguajes de programación, operación del clúster, administración y transferencia de datos, programación en paralelo, y otros
+- Mantenimiento de software: compilar y optmizar nuevas versiones, preparar casos de uso y documentación.
+
+---
+## Departamento de Ciencia de Plantas: Laboratorio Fennell
+
+---
+class: center, middle
 
 # ¡Muchas gracias!
 
-.footnote[.padded[
+.footnote[.padded[.left[
   Presentación creada usando el paquete de R [**xaringan**](https://github.com/yihui/xaringan).
-]]
+  
+  Si, el nombre de la librería es inspirado por [Naruto](https://en.wikipedia.org/wiki/Naruto).
+]]]
 
 ---
 class: center, middle
@@ -434,17 +518,16 @@ class: center, middle
 
 Roberto Villegas-Diaz: <br>
 [contact@robertovillegas-diaz.com](mailto:contact@robertovillegas-diaz.com)
-<!-- [villegas.roberto@hotmail.com](mailto:villegas.roberto@hotmail.com) -->
 
 Github: [@villegar](https://github.com/villegar)
 
 Twitter: [@roberthillo](https://twitter.com/roberthillo)
 
-<img src="images/linkedin.png" alt="LinkedIn" style="width: 150px" /><br>
-<span style="font-size: 12px">LinkedIn</span>
+<a href="https://www.linkedin.com/in/roberto-villegas-diaz"><img src="images/linkedin.png" alt="LinkedIn" style="width: 150px" /><br>
+<span style="font-size: 12px">LinkedIn</span></a>
 ```{r, echo = FALSE, fig.width=3, eval=FALSE}
 library(qrcode)
-#png("qrplot.png")
-qrcode_gen("https://www.linkedin.com/in/roberthillo/")
-#dev.off()
+png("images/linkedin.png")
+qrcode_gen("https://www.linkedin.com/in/roberto-villegas-diaz")
+dev.off()
 ```
