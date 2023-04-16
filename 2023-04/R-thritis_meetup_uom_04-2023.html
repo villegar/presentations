@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Fun with R - Creating a custom R package</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Roberto Villegas-Diaz (he/him)" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: center, middle, hide_logo
+
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 200px;
+height: 52px;
+z-index: 0;
+background-image: url(images/uol_logo.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('a')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = 'https://www.liverpool.ac.uk'
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+
+
+
+
+# R-thritis Meet-Up: 
+# Fun with R - Creating a custom R package
+
+&lt;br /&gt;
+
+### Roberto Villegas-Diaz (he/him)
+#### Data Manager – GroundsWell Consortium
+
+&lt;img src="images/gw_uni_logos.png" width = "700px" /&gt;
+
+---
+
+# Overview
+
+- GroundsWell Consortium
+- Motivation
+- Demo: Creating a custom R package
+- Beyond the basics
+  - Tests
+  - Vignettes
+  - Documentation++
+- References
+
+---
+
+## GroundsWell: Transforming our cities from the ground up
+
+.pull-left[
+
+- Establish important baseline health and environment factors
+
+- Layering co-produced existing data and interventions (e.g. to encourage use of local parks by people who do not ordinarily use them)
+
+- Assessing the impact on health and wellbeing (evidence)
+
+
+.center[
+      ![]( ./images/qr_groundswell_consortium.svg )
+      ]
+
+ &lt;span class='qr-caption'&gt;GroundsWell Consortium&lt;/span&gt;
+
+]
+
+.pull-right[
+
+  &lt;img src="images/groundswell-wps.png" width = "400px" /&gt;
+  
+  &lt;img src="images/gw_uni_logos.png" width = "500px" /&gt;
+
+]
+
+---
+
+class: center, middle
+
+# Motivation
+
+---
+
+## What is a package?
+
+&gt; A package bundles together code, data, documentation, and tests, and is easy to share with others [[5](#references)]
+
+
+--
+
+For a very detailed overview of all the steps necessary to create your own packages, see this book:&lt;br /&gt; https://r-pkgs.org
+
+.pull-left[
+&lt;img src="images/rpkgs_cover.png" height = "350px" /&gt;
+]
+
+.pull-right[
+
+.center[
+      ![]( ./images/qr_r_packages_book.svg )
+      ]
+
+ &lt;span class='qr-caption'&gt;R packages book&lt;/span&gt;
+]
+
+---
+
+## Why should we build packages?
+
+- Reuse functions
+- Standardised documentation
+- Unit tests
+- Contribute to the scientific community
+
+.pull-left[
+
+&lt;img src="https://easystats.github.io/easystats/reference/figures/logo_wall.png" height="400" /&gt;
+
+]
+
+.pull-right[
+
+- And of course, to create cool hex stickers and stick them on your work laptop.
+
+
+.center[
+      ![]( ./images/qr_community-curated_hex_stickers.svg )
+      ]
+
+ &lt;span class='qr-caption'&gt;Community-curated hex stickers&lt;/span&gt;
+
+]
+
+---
+
+## Where can I publish my work?
+
+Firstly, you packages don't have to be public (i.e. you can create packages for internal use only).
+
+- __CRAN (most popular):__ Comprehensive R Archive Network, https://cran.rstudio.com
+
+
+```r
+install.packages("trainR")
+```
+
+--
+
+- __Bioconductor (bioinformatics focused):__ https://bioconductor.org
+
+
+```r
+BiocManager::install("DESeq2")
+```
+
+--
+
+- __GitHub (GitLab, Bitbucket, etc.):__ a more general software development and version control platform, https://github.com
+
+
+```r
+remotes::install_github("villegar/trainR", "dev")
+```
+
+---
+
+## Can I get a DOI for my package? 
+
+Yes, of course. There are few websites where you can submit your work.
+
+- The Journal of Open Source Software (JOSS): https://joss.theoj.org
+
+- The R Journal: https://journal.r-project.org
+
+- Zenodo: https://zenodo.org
+
+--
+
+For example:
+
+&gt; Villegas-Diaz, R., 2021. _trainR: An Interface to the National Rail Enquiries Systems (0.0.1)_. Zenodo. https://doi.org/10.5281/zenodo.4506591
+
+
+There are many more options, see this blog post [[1](#references)]. 
+
+For some tips on promoting your shiny new package, look here [[3](#references)].
+
+.footnote[
+DOI: Digital Object Identifier
+]
+
+---
+
+## What do we need? (1)
+
+- R &amp; RStudio: https://posit.co/download/rstudio-desktop/
+  - ⚠️️ Windows OS’ users: you might need to first install the RTools toolkit:
+  &lt;br /&gt; https://cran.r-project.org/bin/windows/Rtools/
+
+.pull-left[
+
+- Install the following packages:
+  - [devtools](https://devtools.r-lib.org) / [CRAN](https://cran.r-project.org/package=devtools)
+  - [roxygen2](https://roxygen2.r-lib.org) / [CRAN](https://cran.r-project.org/package=roxygen2)
+  - [usethis](https://usethis.r-lib.org) / [CRAN](https://cran.r-project.org/package=usethis)
+  - [pkgdown](https://pkgdown.r-lib.org) / [CRAN](https://cran.r-project.org/package=pkgdown)
+  - [testthat](https://testthat.r-lib.org) / [CRAN](https://cran.r-project.org/package=testthat)
+]
+
+.pull-right[
+
+  Run the following lines inside RStudio:
+  
+  ```r
+  install.packages("devtools")
+  install.packages("roxygen2")
+  install.packages("usethis")
+  install.packages("pkgdown")
+  install.packages("testthat")
+  ```
+
+]
+
+&lt;img src="R-thritis_meetup_uom_04-2023_files/figure-html/unnamed-chunk-9-1.png" width="1360" /&gt;
+
+---
+
+## What do we need? (2)
+
+- Patience (it gets tricky sometimes)
+
+.center[
+&lt;img src="images/my_code_works.jpeg" height="400px" /&gt;
+&lt;span class="img-caption"&gt;Source: https://twitter.com/codecorecollege/status/1450945058220429321&lt;span&gt;
+]
+
+---
+class: hide_logo
+background-image: url("images/enough-talk-show.jpg")
+background-position: center
+background-size: contain
+
+---
+
+class: center, middle
+
+# Demo: Creating a custom R package
+
+## (in less than 1000 steps)
+
+---
+
+## Step-by-step (1)
+
+- Inside RStudio, navigate to
+
+  ```bash 
+  File &gt; New Project...
+  ```
+  
+  The following window should be displayed:
+  .center[
+  &lt;img src = "images/rstudio_new-project-wizard.png" height = "300px" /&gt;
+  ]
+
+---
+
+
+## Step-by-step (2)
+
+- Click on 
+
+  ```bash
+  New Directory &gt; R Package
+  ```
+  
+  The following window should be displayed:
+  .center[
+  &lt;img src = "images/rstudio_new-project-wizard-p2.png" height = "300px" /&gt;
+  ]
+  
+  Choose the name of your package (alphanumeric and underscore only), then click on `Create Project`.
+  
+---
+
+## Step-by-step (3)
+
+.center[
+&lt;img src = "images/rstudio_new-package-window.png" height = "550px" /&gt;
+]
+
+---
+
+## Step-by-step (4)
+
+RStudio should create the following files and directories for you (check the panel in the lower right corner, `Files` tab):
+
+.pull-left[
+&lt;img src = "images/rstudio_new-package-initial-files.png" height = "400px" /&gt;
+]
+
+.pull-right[
+
+- `.gitignore`: list of files to be ignored from version control.
+- `.Rbuildignore`: list of files to be ignored from the build of the package.
+- `DESCRIPTION`: this file contains metadata about your package (e.g. title, description, author(s), license, dependencies, etc.).
+- `man` [directory]: contains the documentation of your package.
+- `NAMESPACE`: auto-generated file listing functions, datasets and other objects in the package.
+- `R` [directory]: contains your R scripts
+- `rthritis.Rproj`: file with the details of your project (e.g. working directory, settings, etc.).
+]
+
+---
+
+## Step-by-step (5)
+
+Before we carry on with the setup of our project, we should delete the existing `man` and `R` directories (we are not interested in the default functions created by RStudio).
+
+.pull-left[
+&lt;img src="images/rstudio_rm-man-R-p1.png" width = "600px" /&gt;
+]
+
+
+.pull-right[
+Click on Yes:
+
+&lt;img src="images/rstudio_rm-man-R-p2.png" width = "300px" /&gt;
+]
+
+
+---
+
+## Step-by-step (6)
+
+I like to overwrite the template created by RStudio for the `DESCRIPTION` file, this can be done by executing the following line of code (in the `Console` tab, bottom left panel):
+
+
+```r
+usethis::use_description()
+```
+
+You will be asked to acknowledge the changes, note that the option to overwrite is __NOT__ always the first one (1), so make sure you pick the right number and hit Enter/Return.
+
+.pull-left[
+&lt;img src="images/rstudio_overwrite-description-p1.png" height="300px" /&gt;
+]
+
+.pull-right[
+&lt;img src="images/rstudio_overwrite-description-p2.png" height="300px" /&gt;
+]
+
+---
+
+## Step-by-step (7)
+
+Next, let's pick a license for our package. [Chapter 13](https://r-pkgs.org/license.html) of [[5](#references)] covers in detail how to choose a license, I usually pick the MIT license (a very permissive one). To add your license, you can use the `usethis` package, choose the appropriate `usethis::use_LICENSE_license` function, where `LICENSE` should be replaced by your choice of license.
+
+In my case, to use the MIT license:
+
+```r
+usethis::use_mit_license(copyright_holder = "GroundsWell Consortium")
+```
+
+.center[
+&lt;img src="images/rstudio_license.png" height="250px" /&gt;
+]
+
+---
+
+## Step-by-step (8)
+
+We need to update one more file, the `NAMESPACE`, so it lists all our new functions. We can do this by running the following command:
+
+
+```r
+usethis::use_namespace()
+```
+
+.center[
+&lt;img src="images/rstudio_namespace.png" height="300px" /&gt;
+]
+
+---
+
+## Step-by-step (9)
+
+One more file (I promise), now that we have updated few files, we can update the `DESCRIPTION` file and add our name, a title, a short description, etc.
+
+.pull-left[
+__Original:__
+&lt;img src="images/rstudio_description-file-p1.png" width="600px" /&gt;
+]
+
+.pull-right[
+__Edited:__
+&lt;img src="images/rstudio_description-file-p2.png" width="600px" /&gt;
+]
+
+Example of `DESCRIPTION` file for a package I published on the CRAN: &lt;br/&gt; https://github.com/special-uor/fxTWAPLS/blob/master/DESCRIPTION
+
+
+---
+class: hide_logo
+background-image: url("images/tired-spongebob-sqpants.webp")
+background-position: center
+background-size: contain
+
+---
+## Step-by-step (10)
+
+Let's create our first function (🎉), using the following command we can create new scripts inside the `R` directory:
+
+
+```r
+usethis::use_r(name = "utils")
+```
+
+You can pick any name for your file, I have chosen `utils` as this will be my file with utilitarian functions.
+
+Next, we can edit this file to create our first function (the file should be in your code `Editor` panel, left upper panel):
+
+
+```r
+area_circle &lt;- function(r) {
+  area &lt;- pi * r ^ 2
+  message("The area of a circle with radius ", r, " is ", area)
+  return(area)
+}
+```
+
+---
+## Step-by-step (11)
+
+This function is still missing one of the __key__ components of functions in a package, __DOCUMENTATION__.
+
+To add the _skeleton_ (template) documentation, place your cursor over the function name (anywhere), then click on `Code &gt; Insert Roxygen Skeleton`:
+
+.pull-left[
+&lt;img src="images/rstudio_utils-fx-p1.png" /&gt;
+]
+
+.pull-right[
+&lt;img src="images/rstudio_utils-fx-p2.png" /&gt;
+]
+
+If you are familiar with code documentation in R, you will recall that we use `#` before writing comments. Roxygen uses an additional character, `'`, to distinguish between regular comments and package documentation, `#` vs `#'`.
+
+---
+
+## Step-by-step (12)
+
+In addition to the special notation for the documentation, `#'`, you might have noticed that the are some words with `@` as prefix (e.g. `@export`), these are special fields to mark different sections of the documentation.
+
+For this tutorial, we care about the following:
+
+- `@param`: used to describe the parameters of a function.
+- `@return`: used to describe the return object (if applicable) of the function.
+- `@export`: used to indicate that the function is "public", without it, the function will be available for "internal" use only.
+- `@examples`: used to add examples on how to use the function.
+
+You can find more details here [[7](#references)] and [Chapter 17](https://r-pkgs.org/man.html) of [[5](#references)].
+
+
+.center[
+      ![]( ./images/qr_roxygen2_-_documenting_functions.svg )
+      ]
+
+ &lt;span class='qr-caption'&gt;Roxygen2 - Documenting functions&lt;/span&gt;
+
+---
+
+## Step-by-step (13)
+
+Now, we can update the documentation. Roxygen uses the first line as the function title, then you can add a short description (leave a line between the `title` and `description` sections). Alternatively, you can use the `@title` and `@description` tags.
+
+.center[
+&lt;img src="images/rstudio_utils-fx-p3.png" height="400px" /&gt;
+]
+
+---
+
+## Step-by-step (14)
+
+Before doing our first build, we need to generate the documentation, this can be done using the following command:
+
+
+```r
+devtools::document()
+```
+
+.pull-left[
+&lt;img src="images/rstudio_devtools-document.png" height="200px" /&gt;
+]
+
+.pull-right[
+&lt;img src="images/rstudio_utils-fx-p4.png" /&gt;
+] 
+
+---
+
+## Step-by-step (15)
+
+Let's create our first build. Navigate to the `Build` tab (right upper panel), then click on
+
+```bash
+More &gt; Build Source Package
+```
+
+.pull-left[
+&lt;img src="images/rstudio_build-p1.png" /&gt;
+]
+
+.pull-right[
+&lt;img src="images/rstudio_build-p2.png" /&gt;
+]
+
+---
+
+## Step-by-step (16)
+
+Before installing our package, it's a good idea to _check_ that its contents (documentation, examples, tests, etc.) are valid/correct. Navigate to the `Build` tab (right upper panel), then click on `Test`:
+
+.center[
+&lt;img src="images/rstudio_check-p1.png" height="400px" /&gt;
+]
+
+Notes are usually harmless, but you have to deal with them if you want to publish your package on the CRAN.
+
+---
+
+## Step-by-step (17)
+
+Finally, we can install and test our package. To install it, navigate to the `Build` tab (right upper panel), then click on `Install`:
+
+.center[
+&lt;img src="images/rstudio_install-p1.png" height="400px" /&gt;
+]
+
+
+---
+
+## Step-by-step (18)
+
+Let's test our package. You can load the entire package to your R session with the `library` function and then execute the function you want:
+
+
+```r
+library(rthritis)
+area_circle(2)
+```
+
+Or, you can call the function directly using the `PACKAGE::FUNCTION` notation:
+
+
+```r
+rthritis::area_circle(2)
+```
+
+Both, will result in the same output:
+
+.center[
+&lt;img src="images/rstudio_utils-fx-p5.png" height="150px" /&gt;
+]
+
+---
+
+## Step-by-step (19)
+
+To checkout the documentation, you can run the following command:
+
+
+```r
+?rthritis::area_circle
+```
+
+.center[
+&lt;img src="images/rstudio_documentation-p1.png" height="370px" /&gt;
+]
+
+More generally, you can run `?PACKAGE::FUNCTION`.
+
+---
+
+class: hide_logo
+background-image: url("images/coding_makes_me_laugh_cry.webp")
+background-position: center
+background-size: contain
+
+
+---
+
+## Step-by-step (20)
+
+Generalising, you can run the following 3 lines of code, every time you want to _document_, _check_ and _install_ the latest version of your package:
+
+
+```r
+devtools::document()
+devtools::check()
+devtools::install()
+```
+
+---
+
+class: center, middle
+
+# Beyond the basics
+
+---
+
+## Tests
+
+&gt; Testing your code can be painful and tedious, but it greatly increases the quality of your code. [[4](#references)].
+
+
+### Implementing tests
+
+We can start by running the following command in the `Console` tab (lower left panel):
+
+
+```r
+usethis::use_test("utils")
+```
+
+You can choose any name you want for the test file, but it's a good practice to use the same name as the script that contains the functions you will be testing, here `utils`.
+
+.center[
+&lt;img src="images/rstudio_tests-p1.png" height="200px" /&gt;
+]
+
+---
+
+## Tests (2)
+
+You should see a new file called `test-utils.R` on the code editor:
+
+.pull-left[
+&lt;img src="images/rstudio_tests-p2.png" /&gt;
+
+We can ignore the example test and write our own tests, for example:
+
+
+```r
+test_that("area_circle works", {
+  area &lt;- area_circle(2)
+  expect_equal(area, pi * 2 ^ 2)
+  # test for invalid radius, a string
+  expect_error(area_circle("2"))
+})
+```
+
+]
+
+.pull-right[
+
+There are two tests here, one expecting to match `expect_equal` the output of the function. And another one, trying to "break" the function, by passing an invalid parameter to the function call, `expect_error`:
+
+&lt;img src="images/rstudio_tests-p3.png" /&gt;
+]
+
+---
+
+## Tests (3)
+
+To execute the tests you have created, you can navigate to the `Build` tab (right upper panel), then click on `Test`. Alternatively, you can run the following command in the `Console` tab (lower left panel):
+
+
+```r
+devtools::test()
+```
+
+You should see something similar to the following output:
+
+.center[
+&lt;img src="images/rstudio_tests-p5.png" height="300px" /&gt;
+]
+
+---
+
+## Tests (4)
+
+For more details about unit tests in R, checkout the documentation for the `testthat` package: https://testthat.r-lib.org/articles/third-edition.html [[4](#references)] and [Chapter 14](https://r-pkgs.org/testing-basics.html) of [[5](#references)].
+
+
+.center[
+&lt;div class="figure"&gt;
+&lt;img src="images/units_tests.jpeg" alt="https://9gag.com/gag/ayMmqyb" width="460" height="413" /&gt;
+&lt;p class="caption"&gt;https://9gag.com/gag/ayMmqyb&lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+
+## Vignettes (1)
+
+&gt; A vignette is a long-form guide to your package ... perfect for showing a workflow that solves that particular problem, start to finish. [[5](#references)]
+
+### Implementing vignettes
+
+We can start by running the following command in the `Console` tab (lower left panel):
+
+
+```r
+usethis::use_vignette("cfe_vs_rthritis", title = "Centre for Epidemiology Versus Arthritis")
+```
+
+You can choose any name you want for the vignette file, but I suggest a short version of the title.
+
+.center[
+&lt;img src="images/rstudio_vignette-p1.png" height="230px" /&gt;
+]
+
+---
+
+## Vignettes (2)
+
+The new vignette file should automatically open on your code editor, then you can start editing and add all the relevant details (text, code, figures, etc.) to create an useful guide to your package.
+
+.center[
+&lt;img src="images/rstudio_vignette-p2.png" height="400px" /&gt;
+]
+
+More details about vignettes can be found in [Chapter 18](https://r-pkgs.org/vignettes.html) of [[5](#references)].
+
+---
+
+## Documentation++ (1)
+
+We previously documented a function, but we can also add more details about the package itself. 
+
+Once again, we can use `usethis` to create the necessary files:
+
+
+```r
+usethis::use_package_doc()
+```
+
+This command will generate a new R script called `{pkgname}-package.R`. Next, we need to _document_, _check_ and _install_ the latest version of the package:
+
+
+```r
+devtools::document()
+devtools::check()
+devtools::install()
+```
+
+Then, we can inspect the documentation for the package with the following command:
+
+
+```r
+help(rthritis)
+```
+
+---
+
+## Documentation++ (2): README
+
+It is a good practice to include a README file in your package. This file can be used to tell users where to get the package (including development versions), how to install it (this assumes the package is hosted somewhere online), provide details about citing the package, links to publications, etc.
+
+To create a README file, run the following command:
+
+
+```r
+usethis::use_readme_rmd()
+```
+
+.center[
+&lt;img src="images/rstudio_readme-p1.png" height="200px" /&gt;
+]
+
+Edit this file and add any relevant details about your package.
+
+---
+
+## Documentation++ (3): Website
+
+Using `pkgdown`, it is possible to generate a website with your package's documentation and vignettes, which can be a more user friendly way to share your work.
+
+To set up the website, you can run the following command:
+
+
+```r
+usethis::use_pkgdown()
+```
+
+.center[
+&lt;img src = "images/rstudio_pkgdown-p1.png" height="200px" /&gt;
+]
+
+To locally deploy the website for your package, you can run the following command:
+
+
+```r
+pkgdown::build_site()
+```
+
+---
+
+## Documentation++ (4): Website
+
+.center[
+&lt;img src="images/rstudio_pkgdown-p1.png" height="480px" /&gt;
+]
+
+Find more details about `pkgdown` here [[8](#references2)] and [Chapter 20](https://r-pkgs.org/website.html) of [[5](#references)].
+
+---
+
+class: center, middle
+
+# Thank you!
+
+.center[
+
+.center[
+      ![]( ./images/qr_roberto.villegas-diaz@liverpool.ac.uk.svg )
+      ]
+
+ &lt;span class='qr-caption'&gt;roberto.villegas-diaz@liverpool.ac.uk&lt;/span&gt;
+]
+
+GitHub: https://github.com/villegar
+
+Slides created using [**xaringan**](https://github.com/yihui/xaringan).
+
+
+---
+name: references
+# References (1)
+
+[1] Dhanraj, N., 2020. _How to publish R packages in good journals_.&lt;br /&gt; https://neerajdhanraj.medium.com/how-to-publish-r-packages-in-good-journals-55a3153bd409
+
+[2] Moraga, P., 2022. _Building R packages_. &lt;br/&gt;https://www.paulamoraga.com/blog/2022/04/12/2022-04-12-rpackages/
+
+[3] Turner, H., 2020. _Publishing and Promoting your R Package_. https://www.heatherturner.net/talks/publishing-and-promoting-r-packages
+
+[4] Wickham, H., 2011. _testthat: Get Started with Testing._ The R Journal, vol. 3, no. 1, pp. 5--10.
+  
+[5] Wickham, H. and Bryan, J., 2023. _R packages (2e)_. https://r-pkgs.org
+
+[6] Wickham, H., Bryan, J., Barrett, M., 2022. _usethis: Automate Package and Project Setup_. R package version 2.1.6, &lt;https://CRAN.R-project.org/package=usethis&gt;.
+
+[7] Wickham, H., Danenberg P., Csárdi G., Eugster M., 2022. _roxygen2: In-Line Documentation for R_. R package version 7.2.3, &lt;https://CRAN.R-project.org/package=roxygen2&gt;.
+
+---
+name: references2
+# References (2)
+
+[8] Wickham, H., Hesselberth, J., Salmon, M., 2022. _pkgdown: Make Static HTML Documentation for a Package_. R package version 2.0.6, &lt;https://CRAN.R-project.org/package=pkgdown&gt;.
+
+[9] Wickham, H., Hester, J., Chang, W., Bryan, J., 2022. _devtools: Tools to Make Developing R Packages Easier_. R package version 2.4.5, &lt;https://CRAN.R-project.org/package=devtools&gt;.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
