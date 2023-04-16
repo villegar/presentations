@@ -819,8 +819,8 @@ class: center, middle
 
 .center[
 ```{r, echo = FALSE, results='asis'}
-insert_qr("mailto:roberto.villegas-diaz@liverpool.ac.uk?subject=R-thritis - R packages", 
-          "roberto.villegas-diaz@liverpool.ac.uk",
+insert_qr("mailto:r.villegas-diaz@liverpool.ac.uk?subject=R-thritis - R packages", 
+          "r.villegas-diaz@liverpool.ac.uk",
           size = 300)
 ```
 ]
