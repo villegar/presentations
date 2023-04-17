@@ -422,6 +422,9 @@ __Edited:__
 <img src="images/rstudio_description-file-p2.png" width="600px" />
 ]
 
+
+More details about the `DESCRIPTION` file can be found in [Chapter 10](https://r-pkgs.org/description.html) of  [[5](#references)].
+
 Example of `DESCRIPTION` file for a package I published on the CRAN: <br/> https://github.com/special-uor/fxTWAPLS/blob/master/DESCRIPTION
 
 
