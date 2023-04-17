@@ -543,7 +543,7 @@ More > Build Source Package
 
 ## Step-by-step (16)
 
-Before installing our package, it's a good idea to _check_ that its contents (documentation, examples, tests, etc.) are valid/correct. Navigate to the `Build` tab (right upper panel), then click on `Test`:
+Before installing our package, it's a good idea to _check_ that its contents (documentation, examples, tests, etc.) are valid/correct. Navigate to the `Build` tab (right upper panel), then click on `Check`:
 
 .center[
 <img src="images/rstudio_check-p1.png" height="400px" />
