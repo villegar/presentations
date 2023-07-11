@@ -1,0 +1,616 @@
+---
+title: "R’s C interface"
+author: "Roberto Villegas-Diaz (he/him)"
+date: "2023/07/11"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+    css: xaringan-themer.css
+    seal: false
+---
+
+class: center, middle, hide_logo
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r helper_functions, echo = FALSE, warning = FALSE, message = FALSE}
+insert_qr <- function(URL, caption, ecl = "M", size = 250, img_dir = "./images") {
+  filename <- caption |>
+    stringr::str_to_lower() |>
+    stringr::str_squish() |>
+    stringr::str_replace_all(" ", "_")
+  filename <- file.path(img_dir, paste0("qr_", filename, ".svg"))
+  qrcode::qr_code(URL, ecl = ecl) |>
+    qrcode::generate_svg(filename = filename,
+                         size = size,
+                         show = FALSE)
+  cat("\n\n.center[
+      ![](", filename, ")
+      ]\n\n",
+      paste0("<span class='qr-caption'>", caption, "</span>")
+      )
+}
+```
+
+# C Book Club for R Contributors:
+# R’s C interface
+
+<br />
+
+### Roberto Villegas-Diaz (he/him)
+#### Data Manager – GroundsWell Consortium
+
+<img src="./images/gw_uni_logos.png" width = "700px" />
+
+---
+
+# Overview
+
+- Calling C functions from R
+- C data structures
+- Creating and modifying vectors
+- Pairlists
+- Input validation
+- Finding the C source code for a function
+- References
+
+---
+
+## Calling C functions from R
+
+Generally, you need:
+
+1. a C function 
+2. an R wrapper function that uses `.Call()`
+
+.pull-left[
+```{c, eval = FALSE}
+// In C ----------------------------------------
+#include <R.h>
+#include <Rinternals.h>
+
+SEXP add(SEXP a, SEXP b) {
+  SEXP result = PROTECT(allocVector(REALSXP, 1));
+  REAL(result)[0] = asReal(a) + asReal(b);
+  UNPROTECT(1);
+
+  return result;
+}
+```
+]
+
+.pull-right[
+```{r, eval = FALSE}
+# In R ----------------------------------------
+add <- function(a, b) {
+  .Call("add", a, b)
+}
+```
+]
+
+
+---
+
+## Calling C functions from R (2)
+
+Alternatively, using the [{inline}](https://cran.r-project.org/package=inline) package, we can combine both chunks:
+
+```{r}
+add <- inline::cfunction(c(a = "integer", b = "integer"), 
+"
+  SEXP result = PROTECT(allocVector(REALSXP, 1));
+  REAL(result)[0] = asReal(a) + asReal(b);
+  UNPROTECT(1);
+
+  return result;
+")
+add(1, 5)
+```
+
+---
+
+## C data structures
+
+__Key points:__
+
+- all R objects are stored in a common datatype, the `SEXP`, or S-expression.
+- every C function that you create must return a `SEXP` as output
+
+The most important types are:
+
+- `REALSXP`: numeric vector
+- `INTSXP`: integer vector
+- `LGLSXP`: logical vector
+- `STRSXP`: character vector
+- `VECSXP`: list
+- `CLOSXP`: function (closure)
+- `ENVSXP`: environment
+
+A `STRSXP`s contains a vector of `CHARSXP`s, where each `CHARSXP` points to C-style string stored in a global pool.
+
+---
+
+## C data structures (2)
+
+```{r}
+pryr::sexp_type(10L)
+pryr::sexp_type("a")
+pryr::sexp_type(TRUE)
+pryr::sexp_type(list(a = 1))
+pryr::sexp_type(pairlist(a = 1))
+```
+
+---
+
+## Creating and modifying vectors
+
+__Key points:__
+
+- Inputs and output will always be R data structures (`SEXP`s) ...
+
+- if you don’t protect every R object you create, the ___garbage collector___ will think they are unused and delete them.
+
+__Creating vectors:__
+
+The simplest way to create a new R-level object is to use `allocVector()`. It takes:
+
+- the type of `SEXP` (or `SEXPTYPE`) to create
+- the length of the vector
+
+---
+
+## Creating and modifying vectors (2)
+
+```{r}
+dummy <- inline::cfunction(body = '
+  SEXP dbls = PROTECT(allocVector(REALSXP, 4));
+  SEXP lgls = PROTECT(allocVector(LGLSXP, 4));
+  SEXP ints = PROTECT(allocVector(INTSXP, 4));
+
+  SEXP vec = PROTECT(allocVector(VECSXP, 3));
+  SET_VECTOR_ELT(vec, 0, dbls);
+  SET_VECTOR_ELT(vec, 1, lgls);
+  SET_VECTOR_ELT(vec, 2, ints);
+
+  UNPROTECT(4);
+  return vec;
+')
+dummy()
+```
+
+---
+
+## Creating and modifying vectors (3)
+
+- `PROTECT()`: tells R that an object is in use and shouldn’t be deleted if the garbage collector is activated.
+
+- `UNPROTECT()`: takes a single integer argument, `n`, and unprotects the last n objects that were protected.
+
+- `UNPROTECT_PTR()`: unprotects the object pointed to by the `SEXP`s.
+
+- `PROTECT_WITH_INDEX()`: saves an index of the protection location that can be used to replace the protected value using `REPROTECT()`.
+
+> Improper protection leads to difficulty diagnosing errors, typically segfaults, but other corruption is possible as well.
+
+---
+
+## Creating and modifying vectors (4)
+
+```{r}
+zeroes <- inline::cfunction(c(n_ = "integer"), '
+  int n = asInteger(n_);
+
+  SEXP out = PROTECT(allocVector(INTSXP, n));
+  memset(INTEGER(out), 0, n * sizeof(int));
+  UNPROTECT(1);
+
+  return out;
+')
+zeroes(10)
+```
+
+---
+
+### Missing and non-finite values
+
+.pull-left[
+
+- `INTSXP`: `NA_INTEGER`
+- `LGLSXP`: `NA_LOGICAL`
+- `STRSXP`: `NA_STRING`
+
+
+Macros to check for:
+
+- Missing values: `ISNA()`   
+- NaN values: `ISNAN()` 
+- Non-finite values: `R_FINITE()`
+
+
+And set those values, using the following: `NA_REAL`, `R_NaN`, `R_PosInf` and `R_NegInf`.
+
+]
+
+.pull-right[
+
+```{r}
+is_finite <- inline::cfunction(c(x = "ANY"), '
+  int n = length(x);
+  
+  SEXP out = PROTECT(allocVector(LGLSXP, n));
+  
+  for (int i = 0; i < n; i++) {
+    LOGICAL(out)[i] = R_FINITE(REAL(x)[i]);
+  }
+  UNPROTECT(1);
+  return out;
+')
+
+is_finite(1)
+is_finite(Inf)
+is_finite(NaN)
+```
+]
+
+---
+
+### Accessing vector data
+
+The following can be used:
+
+`REAL()`, `INTEGER()`, `LOGICAL()`, `COMPLEX()` and `RAW()`
+
+```{r}
+add_one <- inline::cfunction(c(x = "numeric"), "
+  int n = length(x);
+  SEXP out = PROTECT(allocVector(REALSXP, n));
+  
+  for (int i = 0; i < n; i++) {
+    REAL(out)[i] = REAL(x)[i] + 1;
+  }
+  UNPROTECT(1);
+
+  return out;
+")
+
+add_one(as.numeric(1:10))
+```
+
+---
+
+### Accessing vector data (2)
+
+Using pointers to save the result of the helper functions, to improve performance:
+
+```{r}
+add_two <- inline::cfunction(c(x = "numeric"), "
+  int n = length(x);
+  double *px, *pout;
+
+  SEXP out = PROTECT(allocVector(REALSXP, n));
+
+  px = REAL(x);
+  pout = REAL(out);
+  for (int i = 0; i < n; i++) {
+    pout[i] = px[i] + 2;
+  }
+  UNPROTECT(1);
+
+  return out;
+")
+
+add_two(as.numeric(1:10))
+```
+
+---
+
+### Accessing vector data (3)
+
+```{r, cache = TRUE}
+x <- as.numeric(1:1E6)
+
+microbenchmark::microbenchmark(unit = "milliseconds",
+  add_one(x),
+  add_two(x)
+)
+```
+
+---
+
+### Character vectors and lists
+
+Useful functions:
+
+.pull-left[
+
+- `STRING_ELT(x, i)`: to extract the `CHARSXP`.
+- `CHAR(STRING_ELT(x, i))`: to get the actual `const char*` string.
+- `SET_STRING_ELT(x, i, value)`: to set values.
+- `mkChar()`: to turn a C string into a `CHARSXP`.
+- `mkString()`: to turn a C string into a `STRSXP`.
+- `mkChar()`: to create strings to insert in an existing vector.
+- `mkString()`: to create a new (length 1) vector.
+- `VECTOR_ELT(x, i)`: to extract the `VECSXP`.
+- `SET_VECTOR_ELT(x, i, value)`: to set values.
+
+]
+
+.pull-right[
+```{r}
+abc <- inline::cfunction(NULL, '
+  SEXP out = PROTECT(allocVector(STRSXP, 3));
+
+  SET_STRING_ELT(out, 0, mkChar("a"));
+  SET_STRING_ELT(out, 1, mkChar("b"));
+  SET_STRING_ELT(out, 2, mkChar("c"));
+
+  UNPROTECT(1);
+
+  return out;
+')
+
+abc()
+```
+]
+
+> For any problem that involves any kind of string modification, you’re better off using Rcpp.😅
+
+
+---
+
+### Modifying inputs
+
+.pull-left[
+```{r}
+add_three <- inline::cfunction(c(x = "numeric"), '
+  REAL(x)[0] = REAL(x)[0] + 3;
+  return x;
+')
+
+x <- 1
+y <- x
+add_three(x)
+x
+y
+```
+
+]
+
+.pull-right[
+
+```{r}
+add_four <- inline::cfunction(c(x = "numeric"), '
+  SEXP x_copy = PROTECT(duplicate(x));
+  REAL(x_copy)[0] = REAL(x_copy)[0] + 4;
+  UNPROTECT(1);
+  return x_copy;
+')
+x <- 1
+y <- x
+add_four(x)
+x
+y
+```
+
+]
+
+> If you’re working with lists, use `shallow_duplicate()` to make a shallow copy; `duplicate()` will also copy every element in the list.
+
+---
+
+### Coercing scalars
+
+Turn length one R vectors into C scalars:
+
+- `asLogical(x)`: `LGLSXP` -> `int`
+- `asInteger(x)`: `INTSXP` -> `int`
+- `asReal(x)`: `REALSXP` -> `double`
+- `CHAR(asChar(x))`: `STRSXP` -> `const char*`
+
+In the opposite direction:
+
+- `ScalarLogical(x)`: `int` -> `LGLSXP`
+- `ScalarInteger(x)`: `int` -> `INTSXP`
+- `ScalarReal(x)`: `double` -> `REALSXP`
+- `mkString(x)`: `const char*` -> `STRSXP`
+
+> These all create R-level objects, so they need to be `PROTECT()`ed.
+
+--
+
+### Long vectors
+
+```c
+R_xlen_t n = xlength(x)
+```
+
+---
+
+## Pairlists
+
+The basic helpers are 
+- `CAR()`: extracts the first element of the list
+- `CDR()`: extracts the rest of the list
+
+These can be composed to get: `CAAR()`, `CDAR()`, `CADDR()`, `CADDDR()` and so on. 
+
+The corresponding setters are:
+- `SETCAR()`: sets the first element of the list
+- `SETCDR()`: sets the rest of the list
+
+These can be composed to get: `SETCAAR()`, `SETCDAR()`, `SETCADDR()`, etc.
+
+Pairlists are always terminated with `R_NilValue`.
+
+---
+
+## Pairlists (2)
+
+```{r}
+car <- inline::cfunction(c(x = "ANY"), 'return CAR(x);')
+cdr <- inline::cfunction(c(x = "ANY"), 'return CDR(x);')
+cadr <- inline::cfunction(c(x = "ANY"), 'return CADR(x);')
+
+x <- quote(f(a = 1, b = 2))
+```
+
+.pull-left[
+```{r}
+# The first element
+car(x)
+
+# Second and third elements
+cdr(x)
+```
+]
+
+.pull-right[
+```{r}
+# Second element
+car(cdr(x))
+cadr(x)
+
+# Third element
+cdr(cdr(x))
+```
+]
+
+---
+
+## Pairlists (3)
+
+We can use `CONS()` to create a new pairlist and `LCONS()` for new calls.
+
+```{r, cache = TRUE}
+new_call <- inline::cfunction(NULL, '
+  SEXP REALSXP_10 = PROTECT(ScalarReal(10));
+  SEXP REALSXP_5 = PROTECT(ScalarReal(5));
+  SEXP out = PROTECT(LCONS(install("+"), LCONS(
+    REALSXP_10, LCONS(
+      REALSXP_5, R_NilValue
+    )
+  )));
+  UNPROTECT(3);
+  return out;
+')
+gctorture(TRUE)
+new_call()
+gctorture(FALSE)
+```
+
+> `install()` is the equivalent to R's `as.symbol()`.
+
+---
+
+## Pairlists (4)
+
+Attributes are also pairlists, but come with the helper functions `setAttrib()` and `getAttrib()`:
+
+```{r, cache = TRUE}
+set_attr <- inline::cfunction(c(obj = "SEXP", attr = "SEXP", value = "SEXP"), '
+  const char* attr_s = CHAR(asChar(attr));
+
+  duplicate(obj);
+  setAttrib(obj, install(attr_s), value);
+  return obj;
+')
+x <- 1:10
+set_attr(x, "a", 1)
+```
+
+---
+
+## Input validation
+
+> It’s usually easier to do this at the R level.
+
+```{r, cache = TRUE}
+add_ <- inline::cfunction(signature(a = "integer", b = "integer"), "
+  SEXP result = PROTECT(allocVector(REALSXP, 1));
+  REAL(result)[0] = asReal(a) + asReal(b);
+  UNPROTECT(1);
+
+  return result;
+")
+
+add <- function(a, b) {
+  stopifnot(is.numeric(a), is.numeric(b))
+  stopifnot(length(a) == 1, length(b) == 1)
+  add_(a, b)
+}
+```
+
+To coerce objects at the C level, use 
+
+```c
+PROTECT(new = coerceVector(old, SEXPTYPE)). 
+```
+
+---
+
+## Input validation (2)
+
+Helper functions:
+
+- For atomic vectors: `isInteger()`, `isReal()`, `isComplex()`, `isLogical()`, `isString()`.
+
+- For combinations of atomic vectors: `isNumeric()` (integer, logical, real), `isNumber()` (integer, logical, real, complex), `isVectorAtomic()` (logical, integer, numeric, complex, string, raw).
+
+- For matrices (`isMatrix()`) and arrays (`isArray()`).
+
+- For more esoteric objects: `isEnvironment()`, `isExpression()`, `isList()` (a pair list), `isNewList()` (a list), `isSymbol()`, `isNull()`, `isObject()` (S4 objects), `isVector()` (atomic vectors, lists, expressions).
+
+
+---
+
+## Finding the C source code for a function
+
+We can do this by using the `pryr::show_c_source()` function.
+
+```{r}
+sum
+```
+
+```r
+pryr::show_c_source(.Primitive("sum"))
+#> sum is implemented by do_summary with op = 0
+```
+
+See: https://github.com/wch/r-source/blob/cbc551ce2c444a5bddf557f37dfeb3f112344d05/src/main/summary.c#L545
+
+```{r, echo = FALSE, results='asis'}
+insert_qr("https://github.com/wch/r-source/blob/cbc551ce2c444a5bddf557f37dfeb3f112344d05/src/main/summary.c#L545", 
+          "R sum function implementation",
+          size = 200)
+```
+
+---
+
+## Finding the C source code for a function (2)
+
+Internal and primitive functions have four arguments:
+
+- `SEXP call`: the complete call to the function. `CAR(call)` gives the name of the function (as a symbol); `CDR(call)` gives the arguments.
+
+- `SEXP op`: an "offset pointer". This is used when multiple R functions use the same C function. For example `do_logic()` implements `&`, `|`, and `!`.
+
+- `SEXP args`: a pairlist containing the unevaluated arguments to the function.
+
+- `SEXP rho`: the environment in which the call was executed.
+
+---
+
+# References
+
+- R Core Team, 1999-2023. Writing R Extensions - Section 5 ("System and foreign language interfaces"): https://cran.r-project.org/doc/manuals/R-exts.html
+
+- Wickham, H., 2014. Advanced R (1st ed.). Chapman and Hall/CRC. https://doi.org/10.1201/b17487 <br />
+eBook: http://adv-r.had.co.nz
+
