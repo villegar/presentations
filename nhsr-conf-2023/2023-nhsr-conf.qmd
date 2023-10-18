@@ -1,0 +1,449 @@
+---
+title: "You love {purrr}, but have you tried speeding up things {furrr}-ther?"
+author: "Roberto Villegas-Diaz<br>Data Manager @ University of Liverpool"
+format: 
+  revealjs:
+    slide-number: true
+    incremental: true
+    output-file: index.html
+    theme: [default, ./css/custom.css]
+    css: ./css/style.css
+    preview-links: false
+    scrollable: false
+    self-contained: false
+    footer: "[https://tinyurl.com/nhsr-conf-2023-furrr](https://tinyurl.com/nhsr-conf-2023-furrr)"
+---
+
+## Aim
+<!-- On this short talk, I will demonstrate how easily you can update/tweak your purrr code to take advantage of furrr, as well as where is not feasible to use furrr, common mistakes, etc., so you can also speed up your workflows. -->
+
+:::{.nonincremental}
+- Convince the audience that {furrr} is not (too) scary.
+:::
+
+![](./images/cat_with_lion_mane.jpeg){fig-align='center'}
+
+## When a regular cat is not enough, you get the cat a wig?
+
+```{r helper_functions}
+#| echo: false
+insert_qr <- function(URL, caption, ecl = "M", size = 250, img_dir = "./images") {
+  filename <- caption |>
+    stringr::str_to_lower() |>
+    stringr::str_squish() |>
+    stringr::str_replace_all(" ", "_")
+  filename <- file.path(img_dir, paste0("qr_", filename, ".svg"))
+  qrcode::qr_code(URL, ecl = ecl) |>
+    qrcode::generate_svg(filename = filename,
+                         size = size,
+                         show = FALSE)
+  # cat("<a href='", URL, "'>\n")
+  cat("<div class='qr-image-div'>\n")
+  cat("![](", filename, "){fig-align='center' .qr-image}",
+      paste0("<span class='qr-caption'>", caption, "</span>")
+      )
+  cat("</div>")
+  cat("<a/>")
+}
+```
+
+:::: {.columns style='display: flex !important; height: 200px;'}
+
+::: {.column height="250px" width="100%"}
+![](./images/purrr.png){height="200" width="173"}
+![](./images/plus.png){height="55" width="55"}
+![](./images/hair.png){height="200" width="305"}
+![](./images/equal.png){height="50" width="50"}
+![](./images/furrr.png){width="173"}
+::: 
+
+::::
+
+. . .  
+
+<br>
+
+In reality:
+
+> "The goal of {furrr} is to combine {purrr}’s family of mapping functions with {future}’s parallel processing capabilities."
+
+## What are you {purrr}-ing about?
+
+Shout out to Tom Smith \@ Nottingham University Hospitals NHS Trust:
+
+```{r}
+#| echo: false
+#| output: asis
+insert_qr("https://thomuk.github.io/2023-NHSR-Conf-Presentation", 
+          "Learning to purrr",
+          size = 400)
+```
+
+## Hello {furrr}! 
+
+
+```{r}
+#| echo: true
+#| output-location: default
+purrr::map(c("hello", "{purrr}!"), ~.x)
+```
+
+. . .
+
+```{r}
+#| echo: true
+#| output-location: default
+furrr::future_map(c("hello", "{furrr}!"), ~.x)
+```
+
+. . .
+
+::: {style="font-size: 75%;"}
+> Note: Replacing a `map` function by its equivalent `future_map`, **does not** *auto-magically* parallelise your code! 🥲
+:::
+
+
+## First steps
+
+```{r}
+#| echo: true
+#| output-location: default
+# Set a "plan" for how the code should run.
+future::plan(future::multisession, workers = 2)
+
+# This does run in parallel!
+furrr::future_map(c("hello", "{purrr}!"), ~.x)
+```
+
+. . .
+
+**Other functions:** 
+
+::: {style="font-size: 75%;"}
+`future_imap()`, `future_imap_chr()`, ..., <br />
+`future_map2()`, `future_map2_chr()`, ..., <br />
+`future_walk()`, `future_map_chr()`, ..., and more.
+
+Reference: [https://furrr.futureverse.org/reference](https://furrr.futureverse.org/reference)
+:::
+
+## `future::plan`ning
+
+:::{.nonincremental style="font-size: 75%;"}
+- `sequential`: uses the current R process
+- `multisession`: uses separate R sessions
+- `multicore`: uses separate *forked* R processes
+- `cluster`: uses separate R sessions on one or **more** machines
+
+**Reference:** [https://future.futureverse.org/reference/plan.html](https://future.futureverse.org/reference/plan.html)
+:::
+
+**For testing at home:**
+```{r}
+#| eval: false
+#| echo: true
+future::plan("sequential")
+demo("mandelbrot", package = "future", ask = FALSE)
+
+
+future::plan("multisession")
+demo("mandelbrot", package = "future", ask = FALSE)
+```
+
+## Another example
+
+```{r baking_example}
+#| echo: true
+#| cache: true
+bake <- function(dish) {
+  Sys.sleep(2)                      # do your thing
+  return(paste0(dish, ": baked!"))  # result
+}
+
+# demo inputs
+cakes <- c("Cake 1", "Cake 2", "Cake 2", "Cake 4")
+```
+
+. . .
+
+##### Sequential
+
+```{r baking_example_run_seq}
+#| echo: true
+#| cache: true
+#| output-location: fragment
+future::plan(future::sequential)
+tictoc::tic()
+seq_res <- furrr::future_map(cakes, bake)
+tictoc::toc()
+```
+
+. . .
+
+##### Multisession
+
+```{r baking_example_run_mult}
+#| echo: true
+#| cache: true
+#| output-location: fragment
+future::plan(future::multisession, workers = 4)
+tictoc::tic()
+multi_sesh_res <- furrr::future_map(cakes, bake)
+tictoc::toc()
+```
+
+
+
+## Useful commands/tips {.smaller}
+
+:::{.nonincremental}
+- To find the available CPUs (i.e., max number of `workers` for the `plan` function): 
+
+  `future::availableCores()`
+
+- To add progress bar, include `.progress = TRUE` in the function call:
+
+  `furrr::future_map(x, fx, .progress = TRUE)`
+  
+  ⚠️ the documentation suggests shifting to the  [`progressr`](https://CRAN.R-project.org/package=progressr) framework.
+
+![](https://i.pinimg.com/236x/a3/88/1a/a3881a867963572d5ab4739f5e04b0cc.jpg){fig-align='center'}
+
+<!-- - Chunking input -->
+
+:::
+
+<!-- ## Recipe -->
+
+<!-- 1. A "parallelisable" task  -->
+
+<!--   > a big task that can be broken down. -->
+
+<!-- 2.  -->
+
+## A "real world" example (1) { background-image="https://www.ordnancesurvey.co.uk/img-assets/media-components/uprn-blog.x1b5d0cda.png" background-opacity=0.5} 
+
+Imagine we want to compute some spatial indicator `X` at UPRN (Unique Property Reference Number) level, how long will that take?
+
+```{r uprn_example}
+#| echo: false
+#| cache: false
+access_to_green_spaces <- function(uprn, ...) {
+  Sys.sleep(1E-3) # do your thing
+  return(uprn)    # result
+}
+
+# Load datasets derived with the R/uprn_example.R script
+ons_uprn_nw_cm_icb <- readr::read_rds("data/ons_uprn_nw_cm_icb.Rds")
+sub_icb_boundaries_cm <- readr::read_rds("data/sub_icb_boundaries_cm.Rds")
+```
+
+```{r ons_uprn_cm_plot}
+#| warning: false
+#| eval: false
+pal_igv <- ggsci::pal_igv()(13)
+p <- ons_uprn_nw_cm_icb |>
+  ggplot2::ggplot() +
+  ggplot2::geom_sf(ggplot2::aes(fill = pcds_pre_label),
+                   alpha = ons_uprn_nw_cm_icb$pcds_pre_alpha,
+                   stroke = ons_uprn_nw_cm_icb$pcds_pre_stroke,
+                   shape = 21
+                  ) +
+  ggplot2::geom_sf(data = sub_icb_boundaries_cm,
+                   fill = NA, 
+                   colour = "#000000",
+                   linewidth = 1) +
+  ggplot2::scale_fill_manual(
+    name = "Postcode Area",
+    values = c(pal_igv[1:11], NA, pal_igv[12:13])
+  ) +
+  # ggsci::scale_fill_igv(name = "Postcode Area") +
+  ggplot2::labs(title = "ONS UPRN directory",
+                subtitle = "NHS Cheshire & Merseyside ICB") +
+  ggplot2::theme_bw() +
+  ggplot2::guides(
+    fill = ggplot2::guide_legend(override.aes = list(size = 2,
+                                                     alpha = 1)))
+ggplot2::ggsave("images/ons_uprn_cm_plot.png", 
+                plot = p,
+                width = 8,
+                height = 7,
+                units = "in", 
+                dpi = 600)
+```
+
+. . .
+
+**Some UPRN stats:**
+
+::: {.nonincremental}
+
+- [ONS-UPRN directory](https://geoportal.statistics.gov.uk/datasets/ons-uprn-directory-august-2023): 4,564,476 [in North West England]
+- NHS Cheshire & Merseyside ICB: 1,568,275
+
+:::
+. . .
+
+UPRNs are available under the Open Government License (OGL) from the [Ordnance Survey Data Hub](https://osdatahub.os.uk).
+
+::: aside
+Background image credit: © 2023 Ordnance Survey Limited
+:::
+
+
+## A "real world" example (2) { background-image="https://www.ordnancesurvey.co.uk/img-assets/media-components/uprn-blog.x1b5d0cda.png" background-opacity=0.5}
+
+![](images/ons_uprn_cm_plot.png){.absolute top=0 right=50 left=150}
+
+## A "real world" example (3)  { background-image="https://www.ordnancesurvey.co.uk/img-assets/media-components/uprn-blog.x1b5d0cda.png" background-opacity=0.5}
+
+```{r}
+#| echo: true
+#| eval: false
+access_to_green_spaces <- function(uprn, ...) {
+  Sys.sleep(1E-3) # do your thing
+  return(uprn)    # result
+}
+
+# Load datasets derived with the R/uprn_example.R script
+ons_uprn_nw_cm_icb <- 
+  readr::read_rds("../data/ons_uprn_nw_cm_icb.Rds")
+sub_icb_boundaries_cm <- 
+  readr::read_rds("../data/sub_icb_boundaries_cm.Rds")
+```
+
+Code: [R/uprn_example.R](R/uprn_example.R)
+
+## A "real world" example (4) { background-image="https://www.ordnancesurvey.co.uk/img-assets/media-components/uprn-blog.x1b5d0cda.png" background-opacity=0.5} 
+
+##### Sequential
+
+```{r uprn_example_run_seq}
+#| echo: true
+#| cache: true
+#| output-location: fragment
+future::plan(future::sequential)
+tictoc::tic()
+seq_res <- ons_uprn_nw_cm_icb |>
+  furrr::future_pmap(access_to_green_spaces)
+tictoc::toc()
+```
+
+. . .
+
+##### Multisession
+
+```{r uprn_example_run_mult}
+#| echo: true
+#| cache: true
+#| output-location: fragment
+future::plan(future::multisession, workers = 8)
+tictoc::tic()
+multi_sesh_res <- ons_uprn_nw_cm_icb |>
+  furrr::future_pmap(access_to_green_spaces)
+tictoc::toc()
+```
+
+## Common pitfalls: Argument evaluation
+
+```{r}
+#| echo: true
+#| output-location: fragment
+# setup
+x <- rep(0, 3)
+plus <- function(x, y) x + y
+options <- furrr::furrr_options(seed = 123)
+
+# set execution plan
+future::plan(future::multisession, workers = 2)
+
+# run with the same `y` for all workers
+furrr::future_map_dbl(x, plus, runif(1))
+```
+
+<br/>
+
+```{r}
+#| echo: true
+#| output-location: fragment
+# compute `y` for each worker
+furrr::future_map_dbl(x, ~ plus(.x, runif(1)), .options = options)
+```
+
+## Common pitfalls: Function environments and large objects (1)
+
+```{r}
+#| echo: true
+# setup
+future::plan(future::multisession, workers = 2)
+my_fast_fn <- function() {
+  furrr::future_map(1:5, ~.x)
+}
+my_slow_fn <- function() {
+  # Massive object - but we don't want it in `.f`
+  big <- 1:1e8 + 0L
+  furrr::future_map(1:5, ~.x)
+}
+```
+
+```{r}
+#| echo: true
+#| cache: true
+#| output-location: fragment
+system.time(my_fast_fn())
+```
+
+```{r}
+#| echo: true
+#| cache: true
+#| output-location: fragment
+system.time(my_slow_fn())
+```
+ 
+## Common pitfalls: Function environments and large objects (2)
+
+::: {style="font-size: 75%;"}
+> A possible solution, instead of using an anonymous function within the environment of the "large" object, define the function separately:
+
+:::
+
+```{r}
+#| echo: true
+# setup
+future::plan(future::multisession, workers = 2)
+fn <- function(x) {
+  x
+}
+my_not_so_slow_fn <- function() {
+  big <- 1:1e8 + 0L
+  
+  furrr::future_map(1:5, fn)
+}
+```
+
+```{r}
+#| echo: true
+#| cache: true
+#| output-location: fragment
+system.time(my_not_so_slow_fn())
+```
+
+# Thank you!
+
+```{r}
+#| echo: false
+#| output: asis
+insert_qr("mailto:r.villegas-diaz@liverpool.ac.uk?subject=NHS-R conf 2023", 
+          "r.villegas-diaz@liverpool.ac.uk",
+          size = 400)
+```
+
+<!-- ::: {style="font-size: 75%;"} -->
+<!-- [![](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png){height="30" width="30"} github.com/villegar](https://github.com/villegar) -->
+<!-- ::: -->
+
+## Useful links
+
+1. {furrr}'s website: https://furrr.futureverse.org
+2. {future}'s website: https://future.futureverse.org
+3. {progressr}'s website: https://progressr.futureverse.org/
