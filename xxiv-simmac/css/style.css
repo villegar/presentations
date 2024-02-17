@@ -1,0 +1,76 @@
+/*-- scss:defaults --*/
+.qr-caption {
+  position: relative;
+  top: -40px;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+  font-size: 18px;
+  colour: #AAAAAA;
+}
+
+div.qr-image-div {
+  text-align: center;
+}
+
+.qr-image {
+  display: inline;
+  text-align: center;
+  justify-content: center;
+  
+}
+
+.img-caption {
+  display: block;
+  font-size: 10px;
+  colour: #AAAAAA;
+}
+
+.img-caption-medium {
+  display: block;
+  margin-top: -50px;
+  font-size: 20px;
+  colour: #AAAAAA;
+}
+
+.wrap {
+  height: 660px;
+  width: 400px;
+  border: 1px solid #aaa;
+  display: flex;
+}
+
+.wrap span {
+  --base-font-size: 10px;
+  align-self: flex-end;
+}
+
+#vcenter {
+  vertical-align: middle;
+}
+
+.v-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+div.column {
+  display: flex; 
+  justify-content: center !important; 
+  align-items: center !important;
+}
+
+div.column > p > img {
+  display: inline;
+  vertical-align: middle;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+h1.title {
+  color: #333333
+}

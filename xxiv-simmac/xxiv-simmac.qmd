@@ -1,0 +1,661 @@
+---
+title: "<br/>API development with R"
+author: "Roberto Villegas-Diaz"
+institute: "University of Liverpool"
+abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (eg, getting tweets from X -previously known as Twitter-), you can upload information to a remote server (eg, update a dashboard with results from your research), you can interact with hardware (eg, smart devices that are connected to the internet), and many other applications.The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber ( https://cran.r-project.org/package=plumber ) package. The examples on this session will primarily focus on applications in public health; however, the same principles apply to other fields, making it suitable for a wide audience.Topics covered:What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
+contact: "R.Villegas-Diaz@liverpool.ac.uk"
+bibliography: references.bib
+csl: elsevier-harvard2.csl
+nocite: |
+  @*
+lang: en-GB
+format: 
+  revealjs:
+    slide-number: false
+    incremental: false
+    output-file: index.html
+    theme: [default, ./css/custom.css]
+    css: ./css/style.css
+    preview-links: false
+    scrollable: false
+    self-contained: false
+    footer: "[https://www.robertovillegas-diaz.com/presentations/xxiv-simmac](https://www.robertovillegas-diaz.com/presentations/xxiv-simmac)"
+    logo: images/uol_logo.png
+title-slide-attributes: 
+  data-background-image: images/danta.png
+  data-background-size: 60%
+  data-background-position: 50% 2%
+  data-background-opacity: "1"
+---
+
+# Outline
+
+<!-- https://tinyurl.com/xxiv-simmac-2024 -->
+
+```{r helper_functions}
+#| echo: false
+insert_qr <- function(URL, caption, ecl = "M", size = 250, img_dir = "./images") {
+  filename <- caption |>
+    stringr::str_to_lower() |>
+    stringr::str_squish() |>
+    stringr::str_replace_all(" ", "_")
+  filename <- file.path(img_dir, paste0("qr_", filename, ".svg"))
+  qrcode::qr_code(URL, ecl = ecl) |>
+    qrcode::generate_svg(filename = filename,
+                         size = size,
+                         show = FALSE)
+  # cat("<a href='", URL, "'>\n")
+  cat("<div class='qr-image-div'>\n")
+  cat("![](", filename, "){fig-align='center' .qr-image}",
+      paste0("<span class='qr-caption'>", caption, "</span>")
+      )
+  cat("</div>")
+}
+```
+
+- **Day 1**
+  - Introduction to APIs
+  - Working with APIs
+  - Introduction to `{plumber}`
+
+- **Day 2**
+  - Building your own API
+  - Further considerations
+
+# Day 1
+
+# Introduction to APIs
+
+## What's an API? {.smaller}
+
+> **A**pplication **P**rogramming **I**nterface
+
+<div class='qr-image-div'>
+![](images/API-EN.png){height=450 fig-align='center'}
+<span class="img-caption-medium">
+**Source:** [@Tolassy2015]
+</span>
+</div>
+
+---
+
+## Why use APIs? {.smaller}
+
+::: {.incremental}
+- Streamline your data flows
+- Common language
+- Static interface
+- Enable others to use your "products"
+
+:::
+
+<!-- ; @Zhong2019 -->
+
+
+![](images/xkcd_api_2x.png){.absolute bottom=0 right=0} 
+
+::: aside
+**Comic source:** [https://xkcd.com/1481](https://xkcd.com/1481)
+:::
+
+---
+
+## How do APIs work? {.smaller}
+
+> You don't need to know how the kitchen or the restaurant operates, you just need to know how to order. [@Grguric_Buhler_2020]
+
+<div class='qr-image-div'>
+![](images/api_restaurant.png){height=450 fig-align='center'}
+<span class="img-caption-medium">
+**Source:** [@Layne2020]
+</span>
+</div>
+
+## Example APIs {.smaller}
+
+Few examples (there are too many):
+
+- Open Street Maps: [https://wiki.openstreetmap.org/wiki/API](https://wiki.openstreetmap.org/wiki/API)
+- Wikidata: [https://www.wikidata.org/w/api.php?action=help](https://www.wikidata.org/w/api.php?action=help)
+- X / Twitter: [https://developer.twitter.com/en/products/twitter-api](https://developer.twitter.com/en/products/twitter-api)
+
+**Resources of interest**: 
+
+- List of public APIs: [https://github.com/public-apis/public-apis](https://github.com/public-apis/public-apis)
+- R package to access *Hundreds of 'APIs'*: [https://github.com/jonthegeek/anyapi](https://github.com/jonthegeek/anyapi)
+  
+  
+# Working with APIs
+
+## Structure of a Query {.smaller auto-animate=true}
+
+<div class='qr-image-div'>
+![](images/Web_Request-GET.webp){height=450 fig-align='center'}
+<span class="img-caption-medium">
+**Source:** [@realisable2023]
+</span>
+</div>
+
+---
+
+## Structure of a Query {.smaller auto-animate=true}
+
+<div class='qr-image-div'>
+![](images/Web_Request-GET.webp){height=300 fig-align='center'}
+<span class="img-caption-medium">
+**Source:** [@realisable2023]
+</span>
+</div>
+
+"Method" | "Scheme" | "Server" | "Path" | "Query String"
+-|-|-|-|-:
+Pavement | Liver building | Flat 3 | Kitchen/cupboard/get_mug | colour=red
+Road     | Liver building | Garage | park_car
+
+---
+
+## Structure of a Query: Response {.smaller}
+
+::: {.incremental}
+- Typically get a _header_ and _content_ in the response.
+- Common response codes in header
+  - 200 – OK
+  - 404 – Not found
+  - 500 – Internal server error
+  - For more details see: [https://en.wikipedia.org/wiki/List_of_HTTP_status_codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+- Content is usually formatted in JSON^[JavaScript Object Notation: [https://www.json.org](https://www.json.org)] or XML^[eXtensible Markup Language: [https://en.wikipedia.org/wiki/XML](https://en.wikipedia.org/wiki/XML)].
+
+:::
+
+---
+
+## Structure of a Query: Example {.smaller}
+
+<div class='qr-image-div'>
+![](images/structure-of-a-CrossRef-API-Query.png){height=150 fig-align='center'}
+<br/><br/>
+<span class="img-caption-medium">
+**Source:** [@Teplitzky2021]
+</span>
+</div>
+
+Try running the following line of code:
+
+```r
+url("https://api.crossref.org/works/<DOI>")
+```
+
+Replace `<DOI>` by any DOI (Direct Object Identifier) you want! For example: [`10.1016/j.gloplacha.2022.103790`](https://doi.org/10.1016/j.gloplacha.2022.103790).
+
+## Structure of a Query: Example {.smaller auto-animate=true}
+
+<div class='qr-image-div'>
+![](images/structure-of-a-CrossRef-API-Query.png){height=150 fig-align='center'}
+<br/><br/>
+<span class="img-caption-medium">
+**Source:** [@Teplitzky2021]
+</span>
+</div>
+
+Try running the following line of code:
+
+```{r}
+#| echo: true
+url("https://api.crossref.org/works/10.1016/j.gloplacha.2022.103790")
+```
+
+
+## Structure of a Query: Example {.smaller auto-animate=true}
+
+<div class='qr-image-div'>
+![](images/structure-of-a-CrossRef-API-Query.png){height=150 fig-align='center'}
+<br/><br/>
+<span class="img-caption-medium">
+**Source:** [@Teplitzky2021]
+</span>
+</div>
+
+Try running the following line of code:
+
+```{r}
+#| echo: true
+con <- url("https://api.crossref.org/works/10.1016/j.gloplacha.2022.103790")
+tmp <- readLines(con)
+strsplit(tmp, ",")[[1]][1:12] # extract few rows
+```
+
+## Structure of a Query: Example {.smaller auto-animate=false}
+
+<div class='qr-image-div'>
+![](images/structure-of-a-CrossRef-API-Query.png){height=150 fig-align='center'}
+<br/><br/>
+<span class="img-caption-medium">
+**Source:** [@Teplitzky2021]
+</span>
+</div>
+
+A *nicer* approach to run this code:
+
+```{r}
+#| echo: true
+result <- jsonlite::read_json(
+  "https://api.crossref.org/works/10.1016/j.gloplacha.2022.103790"
+)
+
+# get the query status
+result$status
+
+# get field from the result, 'reference count'
+result$message$`reference-count`
+```
+
+# Hands on session 1 {auto-animate=false}
+
+- [**Guided**] How many people are on the International Space Station right now?
+
+- ~~[**DIY**] What is the current rate of COVID-19 in England? Can you create a plot?~~
+
+---
+
+## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=false}
+
+**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+
+```{r}
+#| echo: true
+response <- httr::GET("http://api.open-notify.org/astros.json")
+response
+```
+
+::: {.callout-note}
+Note the values for _Status_ and _Content-Type_! Both useful to determine whether the query was successful and the type of content returned.
+:::
+
+---
+
+## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=true}
+
+**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+
+```{r}
+#| echo: true
+response <- httr::GET("http://api.open-notify.org/astros.json")
+
+# the content is in binary, so convert the response to an R data object
+content <- jsonlite::fromJSON(rawToChar(response$content))
+
+# check number of people
+content$number
+```
+
+---
+
+## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=true}
+
+**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+
+```{r}
+#| echo: true
+response <- httr::GET("http://api.open-notify.org/astros.json")
+
+# the content is in binary, so convert the response to an R data object
+content <- jsonlite::fromJSON(rawToChar(response$content))
+
+# check the people
+content$people
+```
+
+---
+
+## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=true}
+
+**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+
+::: {.callout-tip}
+## Alternative
+Note that we can use the API call with the `jsonlite::read_json` function; however,
+we don't get as much details from the call as we did with our previous approach. Also, this only works when the response returned is in JSON format.
+:::
+
+```{r}
+#| echo: true
+# read contents from API call
+contents <- jsonlite::read_json("http://api.open-notify.org/astros.json")
+```
+
+---
+
+## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=true}
+
+**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+
+```{r}
+#| echo: true
+# read contents from API call
+contents <- jsonlite::read_json("http://api.open-notify.org/astros.json")
+
+# check status of query
+contents$message
+```
+
+---
+
+## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=true}
+
+**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+
+```{r}
+#| echo: true
+# read contents from API call
+contents <- jsonlite::read_json("http://api.open-notify.org/astros.json")
+
+# check number of people
+contents$number
+```
+
+---
+
+## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=true}
+
+**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+
+```{r}
+#| echo: true
+# read contents from API call
+contents <- jsonlite::read_json("http://api.open-notify.org/astros.json")
+
+# extract details of the crew
+contents$people |>
+  purrr::map(\(x) tibble::tibble(name = x$name, craft = x$craft)) |>
+  purrr::list_rbind()
+```
+
+---
+
+## ~~[**DIY**] What is the current rate of COVID-19 in England? Can you create a plot?~~ {.smaller auto-animate=true}
+
+
+# Introduction to [`{plumber}`](https://www.rplumber.io)
+
+![](images/plumber.png){.absolute bottom=0 right=0} 
+
+<br /> <br />
+
+::: {.aside}
+**Plumber's website:** [https://www.rplumber.io](https://www.rplumber.io)
+:::
+
+## What's `{plumber}`? {.smaller}
+
+> Plumber allows you to create a web API by merely _decorating_ your existing R source code with roxygen2-like comments. [@Barret2022]
+
+::: {.fragment .fade-in}
+::: {.callout-tip}
+## R comments \& decorators
+- Regular R comments are included with the `#`. 
+- Roxygen2 comments allow the user to document their functions with the notation `#'` which is translated into R documentation.
+- `{plumber}` uses the notation `#*`.
+:::
+:::
+
+## `{plumber}`-ising a function / notation {.smaller}
+
+Given a simple _hello world_ function
+
+```r
+# This function returns a message
+hello_world <- function() {
+  return("Hello XXIV SIMMAC!")
+}
+```
+
+## `{plumber}`-ising a function / notation {.smaller auto-animate=true}
+
+Given a simple _hello world_ function:
+
+```r
+#* This function returns a message
+#* @get /hello_world
+function() {
+  return("Hello XXIV SIMMAC!")
+}
+```
+
+`{plumber}`-ised function!
+
+::: {.fragment .fade-in}
+::: {.callout-note}
+
+- The change from `#` to `#*` for the comments.
+- The addition of `@get /<function_name>`.
+- The function name was removed.
+
+:::
+:::
+
+
+## `{plumber}`-ising a function / notation: with params {.smaller auto-animate=true}
+
+Given a function to calculate the square of a number, `a`:
+
+```r
+# This function calculates the square of `a`
+square <- function(a) {
+  return(as.numeric(a) ^ 2)
+}
+```
+
+## `{plumber}`-ising a function / notation: with params {.smaller auto-animate=true}
+
+Given a function to calculate the square of a number, `a`:
+
+```r
+#* This function calculates the square of `a`
+#* @param a Numeric value.
+#* @get /square 
+function(a) {
+  return(as.numeric(a) ^ 2)
+}
+```
+
+`{plumber}`-ised function!
+
+::: {.fragment .fade-in}
+::: {.callout-note}
+
+- The change from `#` to `#*` for the comments.
+- The addition of `@param <param_name> <description`. If the function had multiple params, the each of them will have to be documented using this format.
+- The addition of `@get /<function_name>`.
+- The function name was removed.
+
+:::
+:::
+
+
+## Routing & Input {.smaller}
+
+> An incoming HTTP request must be “routed” to one or more R functions. Plumber has two distinct families of functions that it handles: _endpoints_ and _filters_. [@Barret2022]
+
+
+<div class='qr-image-div'>
+![](images/plumber-flow.png){height=350 fig-align='center'}
+
+</div>
+
+
+## Routing & Input: endpoints {.smaller}
+
+An endpoint is an annotated function, like those we already saw:
+
+```r
+#* This function returns a message
+#* @get /hello_world
+function() {
+  return("Hello XXIV SIMMAC!")
+}
+```
+
+::: {.fragment}
+
+::: {.callout-note}
+This annotation specifies that this function is responsible for generating the response to any `GET` request to `/hello_world`. 
+:::
+
+:::
+
+## Routing & Input: endpoints {.smaller auto-animate=true}
+
+The annotations that generate an endpoint include:
+
+- `@get`: Read
+- `@post`: Read / write
+- `@put`: Update / replace
+- `@delete`: Delete
+
+::: {.aside}
+More details can be found here: [https://www.restapitutorial.com/lessons/httpmethods.html](https://www.restapitutorial.com/lessons/httpmethods.html)
+:::
+
+::: {.fragment .fade-in}
+
+An endpoint can support multiple methods: 
+
+```r
+#* @get /cars
+#* @post /cars
+#* @put /cars
+function(){
+  ...
+}
+```
+:::
+
+## Routing & Input: filters {.smaller auto-animate=true}
+
+> allow to break down complex logic into a sequence of independent, understandable steps. [@Barret2022]
+
+::: {.fragment .fade-in} 
+
+Filters can do one of three things in handling a request:
+
+- _Forward_ control onto the next handler, potentially after mutating the request.
+- _Return_ a response itself and not forward to subsequent handlers
+- _Throw_ an error
+
+:::
+
+::: {.aside}
+
+More details about endpoints and filters: [https://www.rplumber.io/articles/routing-and-input.html](https://www.rplumber.io/articles/routing-and-input.html)
+
+:::
+
+
+## Rendering Output {.smaller auto-animate=true}
+
+A response object (an environment) contains the following elements:
+
+<!-- ::: {.incremental} -->
+
+| Name | Example | Description |
+|-|-|-:
+headers	| `list(header = "abc")`	| A list of HTTP headers to include in the response
+body | `NULL` |	This is set to the serialized output of the handler
+status | `200` |	The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) included in the response
+
+<!-- ::: -->
+
+## Rendering Output: serializers {.smaller auto-animate=true}
+
+> In order to send a response from R to an API client, the object must be “serialized” into some format that the client can understand. [@Barret2022]
+
+
+<!-- :::: {.columns} -->
+
+<!-- ::: {.column width="45%"} -->
+
+::: {.fragment .fade-in}
+Some examples:
+
+- CSV: `@serializer csv`
+- JPEG: `@serializer jpeg`
+- JSON: `@serializer json`
+- PDF: `@serializer pdf`
+- PNG: `@serializer png`
+- Text: `@serializer text`
+
+:::
+
+<!-- ::: -->
+
+<!-- ::: {.column width="10%"} -->
+
+<!-- ::: -->
+
+<!-- ::: {.column width="45%"} -->
+
+<!-- ::: {.fragment .fade-in} -->
+
+<!-- ::: -->
+
+<!-- ::: -->
+
+<!-- :::: -->
+
+::: {.aside}
+More details: [https://www.rplumber.io/articles/rendering-output.html](https://www.rplumber.io/articles/rendering-output.html)
+
+:::
+
+## Rendering Output: serializers {.smaller auto-animate=true}
+
+Serializers can also be customised:
+
+```r
+#* Example of custom graphical output
+#* @serializer png list(width = 400, height = 500)
+#* @get /
+function(){
+  plot(1:10)
+}
+```
+
+::: {.fragment .fade-in}
+
+Error handling:
+```r
+#* Example of throwing an error
+#* @get /simple
+function(){
+  stop("I'm an error!")
+}
+
+#* Generate a friendly error
+#* @get /friendly
+function(res){
+  msg <- "Your request did not include a required parameter."
+  res$status <- 400 # Bad request
+  list(error = jsonlite::unbox(msg))
+}
+```
+:::
+# Day 2
+
+# Building your own API
+
+# Further considerations
+
+# Thank you!
+
+```{r}
+#| echo: false
+#| output: asis
+insert_qr("mailto:r.villegas-diaz@liverpool.ac.uk?subject=XXIV SIMMAC", 
+          "r.villegas-diaz@liverpool.ac.uk",
+          size = 400)
+```
+
+# References
+
+::: {#refs}
+:::
