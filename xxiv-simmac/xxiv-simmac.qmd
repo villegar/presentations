@@ -2,7 +2,7 @@
 title: "<br/>API development with R"
 author: "Roberto Villegas-Diaz"
 institute: "University of Liverpool"
-abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (eg, getting tweets from X -previously known as Twitter-), you can upload information to a remote server (eg, update a dashboard with results from your research), you can interact with hardware (eg, smart devices that are connected to the internet), and many other applications.The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber ( https://cran.r-project.org/package=plumber ) package. The examples on this session will primarily focus on applications in public health; however, the same principles apply to other fields, making it suitable for a wide audience.Topics covered:What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
+abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (eg, getting tweets from X -previously known as Twitter-), you can upload information to a remote server (eg, update a dashboard with results from your research), you can interact with hardware (eg, smart devices that are connected to the internet), and many other applications.The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber (https://cran.r-project.org/package=plumber) package. The examples on this session will primarily focus on applications in public health; however, the same principles apply to other fields, making it suitable for a wide audience.Topics covered:What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
 contact: "R.Villegas-Diaz@liverpool.ac.uk"
 bibliography: references.bib
 csl: elsevier-harvard2.csl
@@ -21,7 +21,8 @@ format:
     self-contained: false
     footer: "[https://www.robertovillegas-diaz.com/presentations/xxiv-simmac](https://www.robertovillegas-diaz.com/presentations/xxiv-simmac)"
     logo: images/uol_logo.png
-title-slide-attributes: 
+title-slide-attributes:
+  data-background-color: '#ACD8A9'
   data-background-image: images/danta.png
   data-background-size: 60%
   data-background-position: 50% 2%
@@ -111,7 +112,24 @@ insert_qr <- function(URL, caption, ecl = "M", size = 250, img_dir = "./images")
 </span>
 </div>
 
-## Example APIs {.smaller}
+## Example APIs {.smaller auto-animate=true}
+
+Few examples (there are too many):
+
+- Open Street Maps: [https://wiki.openstreetmap.org/wiki/API](https://wiki.openstreetmap.org/wiki/API)
+- Wikidata: [https://www.wikidata.org/w/api.php?action=help](https://www.wikidata.org/w/api.php?action=help)
+- X / Twitter: [https://developer.twitter.com/en/products/twitter-api](https://developer.twitter.com/en/products/twitter-api)
+
+<div class='qr-image-div'>
+![](images/apis-enable-scale.jpg){height=350 fig-align='center'}
+<span class="img-caption-medium">
+<br />
+**Source:** [@Fox2016]
+</span>
+</div>
+
+
+## Example APIs {.smaller auto-animate=true}
 
 Few examples (there are too many):
 
@@ -123,8 +141,16 @@ Few examples (there are too many):
 
 - List of public APIs: [https://github.com/public-apis/public-apis](https://github.com/public-apis/public-apis)
 - R package to access *Hundreds of 'APIs'*: [https://github.com/jonthegeek/anyapi](https://github.com/jonthegeek/anyapi)
-  
-  
+
+
+<!-- <div class='qr-image-div'> -->
+<!-- ![](images/apis-enable-scale.jpg){height=150 fig-align='center'} -->
+<!-- <span class="img-caption-medium"> -->
+<!-- <br /><br /> -->
+<!-- **Source:** [@Fox2016] -->
+<!-- </span> -->
+<!-- </div> -->
+
 # Working with APIs
 
 ## Structure of a Query {.smaller auto-animate=true}
@@ -251,9 +277,9 @@ result$message$`reference-count`
 
 # Hands on session 1 {auto-animate=false}
 
-- [**Guided**] How many people are on the International Space Station right now?
+- [**Guided**] How many people are on the International Space Station (ISS) right now?
 
-- ~~[**DIY**] What is the current rate of COVID-19 in England? Can you create a plot?~~
+- [**DIY**] What is the current position of the International Space Station? Can you create a plot?
 
 ---
 
@@ -372,7 +398,127 @@ contents$people |>
 
 ---
 
-## ~~[**DIY**] What is the current rate of COVID-19 in England? Can you create a plot?~~ {.smaller auto-animate=true}
+## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller auto-animate=true}
+
+**API call: ** [http://api.open-notify.org/iss-now.json](http://api.open-notify.org/iss-now.json)
+
+::: {.fragment .fade-in}
+
+```{r}
+#| echo: true
+response <- httr::GET("http://api.open-notify.org/iss-now.json")
+
+# the content is in binary, so convert the response to an R data object
+content <- jsonlite::fromJSON(rawToChar(response$content))
+
+# get timestamp
+as.POSIXct(content$timestamp)
+
+# get position coordinates
+content$iss_position
+```
+
+:::
+
+
+## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller auto-animate=true}
+
+**API call: ** [http://api.open-notify.org/iss-now.json](http://api.open-notify.org/iss-now.json)
+
+We can create a helper function to extract multiple records:
+```{.r code-line-numbers="|2-4|5|8-10|15|16|17|"}
+iss_position <- function() {
+  response <- httr::GET("http://api.open-notify.org/iss-now.json")
+  # the content is in binary, so convert the response to an R data object
+  content <- jsonlite::fromJSON(rawToChar(response$content))
+  Sys.sleep(1) # pause for 1 second
+  # extract each field and convert to the appropriate data type
+  tibble::tibble(
+    timestamp = as.POSIXct(content$timestamp),
+    longitude = as.numeric(content$iss_position$longitude),
+    latitute = as.numeric(content$iss_position$latitude)
+  )
+}
+
+# map over the helper function X times, here 10
+iss_position_tbl <- seq_len(10) |> # number of positions to extract
+  purrr::map(\(x) iss_position()) |>
+  purrr::list_rbind()
+```
+
+## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller .scrollable auto-animate=true}
+
+Here is a subset of the positions captured for 15 minutes, `seq_len(15 * 60)`:
+```{r}
+iss_position_tbl <- readr::read_rds("data/iss_position_tbl.rds")
+dplyr::bind_rows(
+  head(iss_position_tbl, n = 10),
+  tail(iss_position_tbl, n = 10)
+) |>
+  knitr::kable()
+```
+
+::: {.callout-note}
+
+Note that only the top 10 rows and the bottom 10 rows are showned, there are an additional `r nrow(iss_position_tbl) - 20` rows of data ranging from `r iss_position_tbl$timestamp[11]` to `r iss_position_tbl$timestamp[nrow(iss_position_tbl) - 9]`.
+
+:::
+
+## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller auto-animate=true}
+
+Plot the positions, here using the [`{leaflet}`](https://cran.r-project.org/package=leaflet) package:
+
+```{r}
+#| echo: true
+#| eval: false
+# create icon from online image
+iss_icon <- leaflet::makeIcon(
+  iconUrl = "https://cdn-icons-png.flaticon.com/512/81/81959.png", 
+  iconWidth = 15, 
+  iconHeight = 15
+)
+
+# create plot of the positions
+iss_position_tbl |>
+  leaflet::leaflet() |>
+  leaflet::addTiles() |>
+  leaflet::addMarkers(
+    lng = ~longitude, 
+    lat = ~latitute, 
+    label = ~timestamp,
+    icon = iss_icon
+  )
+```
+
+
+::: {.aside}
+
+**Icon source:** [https://www.flaticon.com/free-icon/international-space-station_81959](https://www.flaticon.com/free-icon/international-space-station_81959)
+
+:::
+
+## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller auto-animate=true}
+
+```{r}
+#| echo: false
+#| eval: true
+#| fig-align: center
+iss_icon <- leaflet::makeIcon(
+  iconUrl = "https://cdn-icons-png.flaticon.com/512/81/81959.png", 
+  iconWidth = 15, 
+  iconHeight = 15
+)
+
+iss_position_tbl |>
+  leaflet::leaflet() |>
+  leaflet::addTiles() |>
+  leaflet::addMarkers(
+    lng = ~longitude, 
+    lat = ~latitute, 
+    label = ~timestamp,
+    icon = iss_icon
+  )
+```
 
 
 # Introduction to [`{plumber}`](https://www.rplumber.io)
@@ -413,7 +559,7 @@ hello_world <- function() {
 
 Given a simple _hello world_ function:
 
-```r
+```{.r code-line-numbers="|1-2"}
 #* This function returns a message
 #* @get /hello_world
 function() {
@@ -449,7 +595,7 @@ square <- function(a) {
 
 Given a function to calculate the square of a number, `a`:
 
-```r
+```{.r code-line-numbers="|1,3|2|1-3"}
 #* This function calculates the square of `a`
 #* @param a Numeric value.
 #* @get /square 
@@ -487,7 +633,7 @@ function(a) {
 
 An endpoint is an annotated function, like those we already saw:
 
-```r
+```{.r code-line-numbers="|1-2"}
 #* This function returns a message
 #* @get /hello_world
 function() {
@@ -503,7 +649,7 @@ This annotation specifies that this function is responsible for generating the r
 
 :::
 
-## Routing & Input: endpoints {.smaller auto-animate=true}
+## Routing & Input: endpoints {.smaller auto-animate=false}
 
 The annotations that generate an endpoint include:
 
@@ -530,7 +676,7 @@ function(){
 ```
 :::
 
-## Routing & Input: filters {.smaller auto-animate=true}
+## Routing & Input: filters {.smaller auto-animate=false}
 
 > allow to break down complex logic into a sequence of independent, understandable steps. [@Barret2022]
 
@@ -551,7 +697,7 @@ More details about endpoints and filters: [https://www.rplumber.io/articles/rout
 :::
 
 
-## Rendering Output {.smaller auto-animate=true}
+## Rendering Output {.smaller auto-animate=false}
 
 A response object (an environment) contains the following elements:
 
@@ -565,7 +711,7 @@ status | `200` |	The [HTTP status code](https://developer.mozilla.org/en-US/docs
 
 <!-- ::: -->
 
-## Rendering Output: serializers {.smaller auto-animate=true}
+## Rendering Output: serializers {.smaller auto-animate=false}
 
 > In order to send a response from R to an API client, the object must be “serialized” into some format that the client can understand. [@Barret2022]
 
@@ -607,11 +753,11 @@ More details: [https://www.rplumber.io/articles/rendering-output.html](https://w
 
 :::
 
-## Rendering Output: serializers {.smaller auto-animate=true}
+## Rendering Output: serializers {.smaller auto-animate=false}
 
 Serializers can also be customised:
 
-```r
+```{.r code-line-numbers="|2"}
 #* Example of custom graphical output
 #* @serializer png list(width = 400, height = 500)
 #* @get /
@@ -623,7 +769,7 @@ function(){
 ::: {.fragment .fade-in}
 
 Error handling:
-```r
+```{.r code-line-numbers="|4|10-12"}
 #* Example of throwing an error
 #* @get /simple
 function(){
@@ -639,6 +785,7 @@ function(res){
 }
 ```
 :::
+
 # Day 2
 
 # Building your own API
