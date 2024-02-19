@@ -7,7 +7,7 @@ iss_position <- function() {
   tibble::tibble(
     timestamp = as.POSIXct(content$timestamp),
     longitude = as.numeric(content$iss_position$longitude),
-    latitute = as.numeric(content$iss_position$latitude)
+    latitude = as.numeric(content$iss_position$latitude)
   )
 }
 

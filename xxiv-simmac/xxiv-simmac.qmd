@@ -436,7 +436,7 @@ iss_position <- function() {
   tibble::tibble(
     timestamp = as.POSIXct(content$timestamp),
     longitude = as.numeric(content$iss_position$longitude),
-    latitute = as.numeric(content$iss_position$latitude)
+    latitude = as.numeric(content$iss_position$latitude)
   )
 }
 
@@ -484,7 +484,7 @@ iss_position_tbl |>
   leaflet::addTiles() |>
   leaflet::addMarkers(
     lng = ~longitude, 
-    lat = ~latitute, 
+    lat = ~latitude, 
     label = ~timestamp,
     icon = iss_icon
   )
@@ -514,7 +514,7 @@ iss_position_tbl |>
   leaflet::addTiles() |>
   leaflet::addMarkers(
     lng = ~longitude, 
-    lat = ~latitute, 
+    lat = ~latitude, 
     label = ~timestamp,
     icon = iss_icon
   )
@@ -785,6 +785,18 @@ function(res){
 }
 ```
 :::
+
+
+# Hands on session 2 {auto-animate=false}
+
+- Write a plumber function to use gapminder data to show population of Costa Rica in 1982. 
+  
+  ::: {.callout-note}
+  Gapminder is a dataset of populations of various countries from 1952 - 2007. We will access it with the [`{gapminder}`](https://cran.r-project.org/package=gapminder) package. [@Bryan2023]
+  :::
+    
+- Write a plumber function to allow a user to find out the population of any country during any year in gapminder.
+- Write a plumber function to plot the population change of a user defined country.
 
 # Day 2
 
