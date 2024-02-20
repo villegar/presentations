@@ -1,9 +1,10 @@
 ---
 title: "<br/>API development with R"
 author: "Roberto Villegas-Diaz"
-institute: "University of Liverpool"
+institute: "GroundsWell Consortium | University of Liverpool"
 abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (e.g., getting tweets from X -previously known as Twitter-), you can upload information to a remote server (e.g., update a dashboard with results from your research), you can interact with hardware (e.g., smart devices that are connected to the internet), and many other applications. The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber (https://cran.r-project.org/package=plumber) package. Topics covered: What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
-contact: "R.Villegas-Diaz@liverpool.ac.uk"
+email: "R.Villegas-Diaz@liverpool.ac.uk"
+url: https://www.robertovillegas-diaz.com/presentations/xxiv-simmac
 bibliography: inst/references.bib
 csl: inst/elsevier-harvard2.csl
 nocite: |
@@ -287,8 +288,7 @@ result$message$`reference-count`
 
 **API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
 
-```{r}
-#| echo: true
+```{.r code-line-numbers="1|"}
 response <- httr::GET("http://api.open-notify.org/astros.json")
 response
 ```
@@ -303,8 +303,7 @@ Note the values for _Status_ and _Content-Type_! Both useful to determine whethe
 
 **API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
 
-```{r}
-#| echo: true
+```{.r code-line-numbers="|4|"}
 response <- httr::GET("http://api.open-notify.org/astros.json")
 
 # the content is in binary, so convert the response to an R data object
@@ -343,8 +342,7 @@ Note that we can use the API call with the `jsonlite::read_json` function; howev
 we don't get as much details from the call as we did with our previous approach. Also, this only works when the response returned is in JSON format.
 :::
 
-```{r}
-#| echo: true
+```{.r code-line-numbers="2|"}
 # read contents from API call
 contents <- jsonlite::read_json("http://api.open-notify.org/astros.json")
 ```
@@ -460,13 +458,13 @@ dplyr::bind_rows(
 
 ::: {.callout-note}
 
-Note that only the top 10 rows and the bottom 10 rows are showned, there are an additional `r nrow(iss_position_tbl) - 20` rows of data ranging from `r iss_position_tbl$timestamp[11]` to `r iss_position_tbl$timestamp[nrow(iss_position_tbl) - 9]`.
+Note that only the top 10 rows and the bottom 10 rows are displayed, there are an additional `r nrow(iss_position_tbl) - 20` rows of data ranging from `r iss_position_tbl$timestamp[11]` to `r iss_position_tbl$timestamp[nrow(iss_position_tbl) - 9]`.
 
 :::
 
 ## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller auto-animate=true}
 
-Plot the positions, here using the [`{leaflet}`](https://cran.r-project.org/package=leaflet) package:
+Plot the position of the ISS, here using the [`{leaflet}`](https://cran.r-project.org/package=leaflet) package:
 
 ```{r}
 #| echo: true
@@ -520,6 +518,17 @@ iss_position_tbl |>
   )
 ```
 
+# {.smaller}
+
+### Questions? / Short break
+
+<div class='qr-image-div'>
+![](images/conference_question.png){height=570 fig-align='center'}
+<br/><br/>
+<span class="img-caption-medium">
+**Comic source:** [https://xkcd.com/2191](https://xkcd.com/2191)
+</span>
+</div>
 
 # Introduction to [`{plumber}`](https://www.rplumber.io)
 
@@ -559,7 +568,7 @@ hello_world <- function() {
 
 Given a simple _hello world_ function:
 
-```{.r code-line-numbers="|1-2"}
+```{.r code-line-numbers="|1-2|"}
 #* This function returns a message
 #* @get /hello_world
 function() {
@@ -574,7 +583,7 @@ function() {
 
 - The change from `#` to `#*` for the comments.
 - The addition of `@get /<function_name>`.
-- The function name was removed.
+- The function name was relocated.
 
 :::
 :::
@@ -595,7 +604,7 @@ square <- function(a) {
 
 Given a function to calculate the square of a number, `a`:
 
-```{.r code-line-numbers="|1,3|2|1-3"}
+```{.r code-line-numbers="|1,3|2|1-3|"}
 #* This function calculates the square of `a`
 #* @param a Numeric value.
 #* @get /square 
@@ -612,7 +621,7 @@ function(a) {
 - The change from `#` to `#*` for the comments.
 - The addition of `@param <param_name> <description`. If the function had multiple params, the each of them will have to be documented using this format.
 - The addition of `@get /<function_name>`.
-- The function name was removed.
+- The function name was relocated.
 
 :::
 :::
@@ -697,6 +706,36 @@ More details about endpoints and filters: [https://www.rplumber.io/articles/rout
 :::
 
 
+## Routing & Input: filters {.smaller auto-animate=true}
+
+> allow to break down complex logic into a sequence of independent, understandable steps. [@Barret2022]
+
+
+```{.r code-line-numbers="|1|2|3|5|"}
+#* @filter removeSemicolon
+function(req, res) {
+  req$args <- req$args |>
+    purrr::map(stringr::str_remove_all, pattern = ";")
+  plumber::forward()
+}
+```
+
+::: {.fragment .fade-in} 
+
+::: {.callout-note}
+
+- Note the inclusion of the `@filter` _decorator_.
+- A _filter_ has two parameters, `req` (request) and `res` (result). 
+
+  - Both `req` and `res` are R environments, which means that changes done by a filter,
+  will be _visible_ to subsequent filters/endpoints.
+  
+- The `plumber::forward()` call, passes control to the next handler in the pipeline (another filter or an endpoint. [@Barret2022]
+:::
+
+:::
+
+
 ## Rendering Output {.smaller auto-animate=false}
 
 A response object (an environment) contains the following elements:
@@ -710,6 +749,7 @@ body | `NULL` |	This is set to the serialized output of the handler
 status | `200` |	The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) included in the response
 
 <!-- ::: -->
+
 
 ## Rendering Output: serializers {.smaller auto-animate=false}
 
@@ -788,22 +828,79 @@ function(res){
 
 # Building your own API {auto-animate=false}
 
+## {.smaller}
+### Building your own API
+
+::: {.callout-warning}
+Before you attempt the following steps, you must execute the following command:
+
+```r
+install.packages("plumber")
+```
+
+:::
+
+1. Inside RStudio, click on `File` > `New File` > `Plumber API...`:
+
+![](images/rstudio_new_plumber_api.png){height=350 fig-align='center'}
+
+
+## {.smaller}
+### Building your own API
+
+2. Next, choose a name for your API (e.g., `XXIV_SIMMAC`) and click on *Create*:
+
+![](images/rstudio_new_plumber_api_2.png){height=300 fig-align='center'}
+
+
+## {.smaller}
+### Building your own API
+
+3. A new R script (called `plumber.R`) should be displayed in your RStudio session.
+
+```{.r}
+# This is a Plumber API. You can run the API by clicking
+# the 'Run API' button above.
+#
+# Find out more about building APIs with Plumber here:
+#
+#    https://www.rplumber.io/
+#
+library(plumber)
+
+#* @apiTitle Plumber Example API
+#* @apiDescription Plumber example description.
+
+#* Echo back the input
+#* @param msg The message to echo
+#* @get /echo
+function(msg = "") {
+    list(msg = paste0("The message is: '", msg, "'"))
+}
+```
+
+Note that a new button should have appeared at the top of your script options: 
+
+![](images/rstudio_run_api.png){height=40}
+
+Clicking on this button will *deploy* your API locally.
+
 # Hands on session 2 {auto-animate=false}
 
-- Write a plumber function to use the gapminder dataset to find the population of Costa Rica in 1982. 
+- Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982. 
   
   ::: {.callout-note}
   Gapminder is a dataset of populations of various countries from 1952 - 2007. We will access it with the [`{gapminder}`](https://cran.r-project.org/package=gapminder) package. [@Bryan2023]
   :::
     
-- Write a plumber function to allow a user to find out the population of any country during any year in gapminder.
+- Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
 - Write a plumber function to plot the population change of a user defined country.
 
 
 ## {.smaller}
-### Write a plumber function to use gapminder data to show population of Costa Rica in 1982
+### Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
 
-__Where to we start?__
+__Where do we start?__
 
 ::: {.incremental}
 
@@ -830,7 +927,7 @@ pop_cr_1982()
 :::
 
 ## {.smaller auto-animate=true}
-### Write a plumber function to use gapminder data to show population of Costa Rica in 1982
+### Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
 
 2. Next, we can add the "`{plumber}` decorators" to transform this function.
 
@@ -850,9 +947,115 @@ function() {
 :::
 
 
-<!-- # Day 2 -->
+## {.smaller}
+### Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
+
+3. After deploying the API, you can test it as you already learnt:
+
+```{r hands_on_2_exercise_1}
+#| echo: true
+#| cache: true
+response <- httr::GET("http://127.0.0.1:6238/pop_cr_1982")
+response
+
+# the content is in binary, so convert the response to an R data object
+content <- jsonlite::fromJSON(rawToChar(response$content))
+content
+
+```
+
+
+## {.smaller auto-animate=true}
+### Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+
+
+__Where do we start?__
+
+::: {.incremental}
+
+1. We can start by adapting our previous solution.
+
+::: {.fragment .fade-in}
+
+```{.r}
+#* This function returns the population of Costa Rica in 1982
+#* @get /pop_cr_1982 
+function() {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == "Costa Rica") |>
+    dplyr::filter(year == 1982)
+  return(pop_tbl$pop)
+}
+```
+
+:::
+
+:::
+
+## {.smaller auto-animate=true}
+### Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+
+
+__Where do we start?__
+
+
+1. We can start by adapting our previous solution.
+
+```{.r code-line-numbers="|1|2-3|3-4|7-8|"}
+#* This function returns the population for a `country` in a particular `year`
+#* @param country String with a country in the Gapminder dataset: https://doi.org/10.7910/DVN/GJQNEQ.
+#* @param year A numeric value with a year of data available in Gapminder dataset (1952 - 2007 in steps of 5 years).
+#* @get /pop_country
+function(country, year) {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == !!country) |>
+    dplyr::filter(year == as.numeric(!!year))
+  return(pop_tbl$pop)
+}
+```
+
+::: {.callout-note}
+
+Note the addition of the *bang-bang* operator, to "unquote" the values received for `country` and `year`. [@wickham2014advanced]
+
+:::
+
+## {.smaller .scrollable}
+### Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+
+2. After deploying the API, you can test it as you already learnt:
+
+```{r hands_on_2_exercise_2}
+#| echo: true
+#| cache: true
+# encode URL / replace spaces, etc.
+url <- URLencode("http://127.0.0.1:6238/pop_country?country=United Kingdom&year=1982")
+response <- httr::GET(url)
+response
+
+# the content is in binary, so convert the response to an R data object
+content <- jsonlite::fromJSON(rawToChar(response$content))
+content
+```
+
+::: {.callout-note}
+Note that this call to the API has an extra line, 
+
+```{.r}
+URLencode("http://127.0.0.1:6238/pop_country?country=United Kingdom&year=1982")
+```
+
+The function `URLencode` changes special characters (like spaces) into the appropriate hexadecimal representation.
+:::
 
 # Further considerations
+
+
+## {.smaller}
+
+### Further considerations
+
+- Remote deployment: [https://www.rplumber.io/articles/hosting.html](https://www.rplumber.io/articles/hosting.html)
 
 # Thank you!
 
