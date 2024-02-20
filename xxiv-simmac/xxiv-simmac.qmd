@@ -63,7 +63,7 @@ insert_qr <- function(URL, caption, ecl = "M", size = 250, img_dir = "./images")
   - Building your own API
   - Further considerations
 
-# Day 1
+<!-- # Day 1 -->
 
 # Introduction to APIs
 
@@ -786,10 +786,11 @@ function(res){
 ```
 :::
 
+# Building your own API {auto-animate=false}
 
 # Hands on session 2 {auto-animate=false}
 
-- Write a plumber function to use gapminder data to show population of Costa Rica in 1982. 
+- Write a plumber function to use the gapminder dataset to find the population of Costa Rica in 1982. 
   
   ::: {.callout-note}
   Gapminder is a dataset of populations of various countries from 1952 - 2007. We will access it with the [`{gapminder}`](https://cran.r-project.org/package=gapminder) package. [@Bryan2023]
@@ -798,9 +799,58 @@ function(res){
 - Write a plumber function to allow a user to find out the population of any country during any year in gapminder.
 - Write a plumber function to plot the population change of a user defined country.
 
-# Day 2
 
-# Building your own API
+## {.smaller}
+### Write a plumber function to use gapminder data to show population of Costa Rica in 1982
+
+__Where to we start?__
+
+::: {.incremental}
+
+1. We can start by creating a "simple" R function that gets the data want!
+
+::: {.fragment .fade-in}
+
+```{r}
+#| echo: true
+# This function returns the population of Costa Rica in 1982
+pop_cr_1982 <- function() {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == "Costa Rica") |>
+    dplyr::filter(year == 1982)
+  return(pop_tbl$pop)
+}
+
+# call our function
+pop_cr_1982()
+```
+
+:::
+
+:::
+
+## {.smaller auto-animate=true}
+### Write a plumber function to use gapminder data to show population of Costa Rica in 1982
+
+2. Next, we can add the "`{plumber}` decorators" to transform this function.
+
+::: {.fragment .fade-in}
+
+```{.r code-line-numbers="|1-2|3|"}
+#* This function returns the population of Costa Rica in 1982
+#* @get /pop_cr_1982 
+function() {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == "Costa Rica") |>
+    dplyr::filter(year == 1982)
+  return(pop_tbl$pop)
+}
+```
+
+:::
+
+
+<!-- # Day 2 -->
 
 # Further considerations
 
