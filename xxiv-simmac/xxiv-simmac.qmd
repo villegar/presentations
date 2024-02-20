@@ -2,10 +2,10 @@
 title: "<br/>API development with R"
 author: "Roberto Villegas-Diaz"
 institute: "University of Liverpool"
-abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (eg, getting tweets from X -previously known as Twitter-), you can upload information to a remote server (eg, update a dashboard with results from your research), you can interact with hardware (eg, smart devices that are connected to the internet), and many other applications.The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber (https://cran.r-project.org/package=plumber) package. The examples on this session will primarily focus on applications in public health; however, the same principles apply to other fields, making it suitable for a wide audience.Topics covered:What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
+abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (e.g., getting tweets from X -previously known as Twitter-), you can upload information to a remote server (e.g., update a dashboard with results from your research), you can interact with hardware (e.g., smart devices that are connected to the internet), and many other applications. The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber (https://cran.r-project.org/package=plumber) package. Topics covered: What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
 contact: "R.Villegas-Diaz@liverpool.ac.uk"
-bibliography: references.bib
-csl: elsevier-harvard2.csl
+bibliography: inst/references.bib
+csl: inst/elsevier-harvard2.csl
 nocite: |
   @*
 lang: en-GB
