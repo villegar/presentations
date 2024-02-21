@@ -7,8 +7,6 @@
 #    https://www.rplumber.io/
 #
 
-library(plumber)
-
 #* This function returns the population of Costa Rica in 1982
 #* @get /pop_cr_1982 
 function() {
@@ -27,4 +25,43 @@ function(country, year) {
     dplyr::filter(country == !!country) |>
     dplyr::filter(year == as.numeric(!!year))
   return(pop_tbl$pop)
+}
+
+#* This filter checks for valid countries in the Gapminder dataset
+#* @filter validate_year
+function(req, res) {
+  # check if the calling endpoint has a year parameter
+  if ("year" %in% names(req$args)) {
+    # check if the given year is in the Gapminder dataset
+    year <- as.numeric(req$args$year)
+    gapminder_years <- unique(gapminder::gapminder$year)
+    # do check
+    status <- any(year %in% gapminder_years)
+    if (!status) {
+      msg <- paste0("The given year, ", year, 
+                    ", it's not part of the Gapminder dataset. ",
+                    "Please, try one of the following: ",
+                    paste0(gapminder_years, collapse = ", ")) 
+      res$status <- 400 # Bad request
+      return(list(
+        error = jsonlite::unbox(msg),
+        valid_years = gapminder_years
+      )
+      )
+    }
+  }
+  plumber::forward()
+}
+
+#* This function returns a plot of the change in population for a `country`, as per the Gapminder dataset
+#* @param country String with a country in the Gapminder dataset: https://doi.org/10.7910/DVN/GJQNEQ.
+#* @serializer png
+#* @get /pop_country_change
+function(country) {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == !!country) |>
+    dplyr::select(year, pop)
+  
+  options(scipen=999) # Change number format on axes
+  plot(pop_tbl, xlab = "Year", ylab = "Population")
 }
