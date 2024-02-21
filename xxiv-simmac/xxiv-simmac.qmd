@@ -1,7 +1,7 @@
 ---
 title: "<br/>API development with R"
 author: "Roberto Villegas-Diaz"
-institute: "GroundsWell Consortium | University of Liverpool"
+institute: "University of Liverpool"
 abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (e.g., getting tweets from X -previously known as Twitter-), you can upload information to a remote server (e.g., update a dashboard with results from your research), you can interact with hardware (e.g., smart devices that are connected to the internet), and many other applications. The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber (https://cran.r-project.org/package=plumber) package. Topics covered: What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
 email: "R.Villegas-Diaz@liverpool.ac.uk"
 url: https://www.robertovillegas-diaz.com/presentations/xxiv-simmac
@@ -31,12 +31,28 @@ title-slide-attributes:
 ---
 
 # Outline
+<!-- ## Acknowledgment -->
 
-<!-- https://tinyurl.com/xxiv-simmac-2024 -->
+<!-- <div class='qr-image-div'> -->
+<!-- ![](images/groundswell_logo.png){width=920 fig-align='center'} -->
+<!-- ![](images/gw_uni_logos.png){width=900 fig-align='center'} -->
+<!-- </div> -->
+
+<!-- ::: {.aside} -->
+<!-- **Website:** [https://www.groundswelluk.org](https://www.groundswelluk.org) -->
+<!-- ::: -->
+
+<!-- # Outline -->
 
 ```{r helper_functions}
 #| echo: false
-insert_qr <- function(URL, caption, ecl = "M", size = 250, img_dir = "./images") {
+insert_qr <- function(URL, 
+                      caption, 
+                      ecl = "M", 
+                      size = 250, 
+                      img_dir = "./images",
+                      foreground = "black",
+                      background = "white") {
   filename <- caption |>
     stringr::str_to_lower() |>
     stringr::str_squish() |>
@@ -44,7 +60,9 @@ insert_qr <- function(URL, caption, ecl = "M", size = 250, img_dir = "./images")
   filename <- file.path(img_dir, paste0("qr_", filename, ".svg"))
   qrcode::qr_code(URL, ecl = ecl) |>
     qrcode::generate_svg(filename = filename,
-                         size = size,
+                         size = size, 
+                         foreground = foreground,
+                         background = background,
                          show = FALSE)
   # cat("<a href='", URL, "'>\n")
   cat("<div class='qr-image-div'>\n")
@@ -812,13 +830,13 @@ Error handling:
 ```{.r code-line-numbers="|4|10-12"}
 #* Example of throwing an error
 #* @get /simple
-function(){
+function() {
   stop("I'm an error!")
 }
 
 #* Generate a friendly error
 #* @get /friendly
-function(res){
+function(res) {
   msg <- "Your request did not include a required parameter."
   res$status <- 400 # Bad request
   list(error = jsonlite::unbox(msg))
@@ -826,7 +844,7 @@ function(res){
 ```
 :::
 
-# Building your own API {auto-animate=false}
+# Building your own API { auto-animate=false}
 
 ## {.smaller}
 ### Building your own API
@@ -845,8 +863,7 @@ install.packages("plumber")
 ![](images/rstudio_new_plumber_api.png){height=350 fig-align='center'}
 
 
-## {.smaller}
-### Building your own API
+## Building your own API {.smaller}
 
 2. Next, choose a name for your API (e.g., `XXIV_SIMMAC`) and click on *Create*:
 
@@ -885,26 +902,27 @@ Note that a new button should have appeared at the top of your script options:
 
 Clicking on this button will *deploy* your API locally.
 
-# Hands on session 2 {auto-animate=false}
+# Hands on session 2 {.smaller auto-animate=false}
 
-- Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982. 
+I. Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982. 
   
-  ::: {.callout-note}
-  Gapminder is a dataset of populations of various countries from 1952 - 2007. We will access it with the [`{gapminder}`](https://cran.r-project.org/package=gapminder) package. [@Bryan2023]
-  :::
+::: {.callout-note}
+Gapminder is a dataset of populations of various countries from 1952 - 2007. We will access it with the [`{gapminder}`](https://cran.r-project.org/package=gapminder) package. [@Bryan2023]
+:::
     
-- Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
-- Write a plumber function to plot the population change of a user defined country.
+II. Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+
+III. Write a plumber function to plot the population change of a user defined country.
 
 
 ## {.smaller}
-### Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
+### I. Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
 
 __Where do we start?__
 
 ::: {.incremental}
 
-1. We can start by creating a "simple" R function that gets the data want!
+1. We can start by creating a "simple" R function that gets the data we want!
 
 ::: {.fragment .fade-in}
 
@@ -927,7 +945,7 @@ pop_cr_1982()
 :::
 
 ## {.smaller auto-animate=true}
-### Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
+### I. Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
 
 2. Next, we can add the "`{plumber}` decorators" to transform this function.
 
@@ -948,7 +966,7 @@ function() {
 
 
 ## {.smaller}
-### Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
+### I. Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
 
 3. After deploying the API, you can test it as you already learnt:
 
@@ -966,7 +984,7 @@ content
 
 
 ## {.smaller auto-animate=true}
-### Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+### II. Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
 
 
 __Where do we start?__
@@ -993,7 +1011,7 @@ function() {
 :::
 
 ## {.smaller auto-animate=true}
-### Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+### II. Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
 
 
 __Where do we start?__
@@ -1021,7 +1039,7 @@ Note the addition of the *bang-bang* operator, to "unquote" the values received 
 :::
 
 ## {.smaller .scrollable}
-### Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+### II. Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
 
 2. After deploying the API, you can test it as you already learnt:
 
@@ -1048,16 +1066,156 @@ URLencode("http://127.0.0.1:6238/pop_country?country=United Kingdom&year=1982")
 The function `URLencode` changes special characters (like spaces) into the appropriate hexadecimal representation.
 :::
 
+
+## {.smaller auto-animate=true}
+### II. Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+
+Further improvements, the solution shown before does not handle (in a user friendly) common errors like: 
+
+- entering a country that doesn't exist in the Gapminder data
+- choosing a year outside those available
+- choosing a non-numeric value for the year
+- and probably others.
+
+
+## {.smaller auto-animate=true .scrollable}
+### II. Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+
+**Is there anything we can do to validate these fields?**
+
+::: {.fragment}
+
+Yes, of course! We can create a _filter_ or perform these checks within the _endpoint_.
+
+```{.r code-line-numbers="|1-2|5|7-8|10|12-15|16|18-19|24|"}
+#* This filter checks for valid countries in the Gapminder dataset
+#* @filter validate_year
+function(req, res) {
+  # check if the calling endpoint has a year parameter
+  if ("year" %in% names(req$args)) {
+    # check if the given year is in the Gapminder dataset
+    year <- as.numeric(req$args$year)
+    gapminder_years <- unique(gapminder::gapminder$year)
+    # do check
+    status <- any(year %in% gapminder_years)
+    if (!status) {
+      msg <- paste0("The given year, ", year, 
+                    ", it's not part of the Gapminder dataset. ",
+                    "Please, try one of the following: ",
+                    paste0(gapminder_years, collapse = ", ")) 
+      res$status <- 400 # Bad request
+      return(list(
+        error = jsonlite::unbox(msg),
+        valid_years = gapminder_years
+        )
+      )
+    }
+  }
+  plumber::forward()
+}
+```
+
+:::
+
+## {.smaller auto-animate=true .scrollable}
+### II. Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
+
+Let's test if the new filter works, by requesting data for a year not in the Gapminder dataset: 
+
+```{r}
+#| echo: true
+#| cache: false
+# encode URL / replace spaces, etc.
+url <- URLencode("http://127.0.0.1:6238/pop_country?country=United Kingdom&year=2024")
+response <- httr::GET(url)
+response
+
+# the content is in binary, so convert the response to an R data object
+content <- jsonlite::fromJSON(rawToChar(response$content))
+content
+```
+
+## {.smaller auto-animate=true}
+### III. Write a plumber function to plot the population change of a user defined country.
+
+
+__Where do we start?__
+
+1. We can start by adapting our previous solution.
+
+```{.r}
+#* This function returns the population for a `country` in a particular `year`
+#* @param country String with a country in the Gapminder dataset: https://doi.org/10.7910/DVN/GJQNEQ.
+#* @param year A numeric value with a year of data available in Gapminder dataset (1952 - 2007 in steps of 5 years).
+#* @get /pop_country
+function(country, year) {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == !!country) |>
+    dplyr::filter(year == as.numeric(!!year))
+  return(pop_tbl$pop)
+}
+```
+
+## {.smaller auto-animate=true}
+### III. Write a plumber function to plot the population change of a user defined country.
+
+
+__Where do we start?__
+
+1. We can start by adapting our previous solution.
+
+```{.r code-line-numbers="|3-4|10-11|"}
+#* This function returns a plot of the change in population for a `country`, as per the Gapminder dataset
+#* @param country String with a country in the Gapminder dataset: https://doi.org/10.7910/DVN/GJQNEQ.
+#* @serializer png
+#* @get /pop_country_change
+function(country) {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == !!country) |>
+    dplyr::select(year, pop)
+  
+  options(scipen=999) # Change number format on axes
+  plot(pop_tbl, xlab = "Year", ylab = "Population")
+}
+```
+
+## {.smaller auto-animate=true}
+### III. Write a plumber function to plot the population change of a user defined country.
+
+2. After deploying the API, you can test it as you already learnt:
+
+```{r}
+#| echo: true
+#| cache: true
+# encode URL / replace spaces, etc.
+url <- URLencode("http://127.0.0.1:6238/pop_country_change?country=Costa Rica")
+response <- httr::GET(url)
+response
+
+# the content is in binary, so convert the response to an R data object
+content <- png::readPNG(response$content)
+grid::grid.raster(content, height = grid::unit(5, "in"))
+```
+
 # Further considerations
 
-
-## {.smaller}
+## {.smaller .incremental}
 
 ### Further considerations
 
 - Remote deployment: [https://www.rplumber.io/articles/hosting.html](https://www.rplumber.io/articles/hosting.html)
 
-# Thank you!
+- Swagger documentation: 
+  - [https://www.rplumber.io/reference/pr_set_docs.html](https://www.rplumber.io/reference/pr_set_docs.html)
+  - [https://swagger.io](https://swagger.io)
+  
+- Security: [https://www.rplumber.io/articles/security.html](https://www.rplumber.io/articles/security.html)
+
+- Cheatsheet: [https://github.com/rstudio/cheatsheets/blob/main/plumber.pdf](https://github.com/rstudio/cheatsheets/blob/main/plumber.pdf)
+
+# Thank you! 
+
+<!-- {background-image="images/rU32uy.jpg"} -->
 
 ```{r}
 #| echo: false
