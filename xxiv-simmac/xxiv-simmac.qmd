@@ -1,5 +1,5 @@
 ---
-title: "<br/>API development with R"
+title: "<img src='images/danta.png' /><br/>API development with R"
 author: "Roberto Villegas-Diaz"
 institute: "University of Liverpool"
 abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (e.g., getting tweets from X -previously known as Twitter-), you can upload information to a remote server (e.g., update a dashboard with results from your research), you can interact with hardware (e.g., smart devices that are connected to the internet), and many other applications. The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber (https://cran.r-project.org/package=plumber) package. Topics covered: What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
@@ -24,10 +24,10 @@ format:
     logo: images/uol_logo.png
 title-slide-attributes:
   data-background-color: '#ACD8A9'
-  data-background-image: images/danta.png
-  data-background-size: 60%
-  data-background-position: 50% 2%
-  data-background-opacity: "1"
+  # data-background-image: images/danta.png
+  # data-background-size: 47%
+  # data-background-position: 50% 2%
+  # data-background-opacity: "1"
 ---
 
 # Outline
@@ -815,7 +815,7 @@ More details: [https://www.rplumber.io/articles/rendering-output.html](https://w
 
 Serializers can also be customised:
 
-```{.r code-line-numbers="|2"}
+```{.r code-line-numbers="|2|"}
 #* Example of custom graphical output
 #* @serializer png list(width = 400, height = 500)
 #* @get /
@@ -827,7 +827,7 @@ function(){
 ::: {.fragment .fade-in}
 
 Error handling:
-```{.r code-line-numbers="|4|10-12"}
+```{.r code-line-numbers="|4|10-12|"}
 #* Example of throwing an error
 #* @get /simple
 function() {
@@ -972,8 +972,8 @@ function() {
 
 ```{r hands_on_2_exercise_1}
 #| echo: true
-#| cache: true
-response <- httr::GET("http://127.0.0.1:6238/pop_cr_1982")
+#| cache: false
+response <- httr::GET("http://127.0.0.1:1234/pop_cr_1982")
 response
 
 # the content is in binary, so convert the response to an R data object
@@ -1019,7 +1019,7 @@ __Where do we start?__
 
 1. We can start by adapting our previous solution.
 
-```{.r code-line-numbers="|1|2-3|3-4|7-8|"}
+```{.r code-line-numbers="|1|2-3|4|7-8|"}
 #* This function returns the population for a `country` in a particular `year`
 #* @param country String with a country in the Gapminder dataset: https://doi.org/10.7910/DVN/GJQNEQ.
 #* @param year A numeric value with a year of data available in Gapminder dataset (1952 - 2007 in steps of 5 years).
@@ -1045,9 +1045,9 @@ Note the addition of the *bang-bang* operator, to "unquote" the values received 
 
 ```{r hands_on_2_exercise_2}
 #| echo: true
-#| cache: true
+#| cache: false
 # encode URL / replace spaces, etc.
-url <- URLencode("http://127.0.0.1:6238/pop_country?country=United Kingdom&year=1982")
+url <- URLencode("http://127.0.0.1:1234/pop_country?country=United Kingdom&year=1982")
 response <- httr::GET(url)
 response
 
@@ -1060,7 +1060,7 @@ content
 Note that this call to the API has an extra line, 
 
 ```{.r}
-URLencode("http://127.0.0.1:6238/pop_country?country=United Kingdom&year=1982")
+URLencode("http://127.0.0.1:1234/pop_country?country=United Kingdom&year=1982")
 ```
 
 The function `URLencode` changes special characters (like spaces) into the appropriate hexadecimal representation.
@@ -1126,7 +1126,7 @@ Let's test if the new filter works, by requesting data for a year not in the Gap
 #| echo: true
 #| cache: false
 # encode URL / replace spaces, etc.
-url <- URLencode("http://127.0.0.1:6238/pop_country?country=United Kingdom&year=2024")
+url <- URLencode("http://127.0.0.1:1234/pop_country?country=United Kingdom&year=2024")
 response <- httr::GET(url)
 response
 
@@ -1186,9 +1186,9 @@ function(country) {
 
 ```{r}
 #| echo: true
-#| cache: true
+#| cache: false
 # encode URL / replace spaces, etc.
-url <- URLencode("http://127.0.0.1:6238/pop_country_change?country=Costa Rica")
+url <- URLencode("http://127.0.0.1:1234/pop_country_change?country=Costa Rica")
 response <- httr::GET(url)
 response
 

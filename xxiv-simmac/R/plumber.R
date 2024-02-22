@@ -5,7 +5,22 @@
 # Find out more about building APIs with Plumber here:
 #
 #    https://www.rplumber.io/
-#
+
+# set plumber port
+options("plumber.port" = 1234)
+
+#* This function returns a message
+#* @get /hello_world
+function() {
+  return("Hello XXIV SIMMAC!")
+}
+
+#* This function calculates the square of `a`
+#* @param a Numeric value.
+#* @get /square 
+function(a) {
+  return(as.numeric(a) ^ 2)
+}
 
 #* This function returns the population of Costa Rica in 1982
 #* @get /pop_cr_1982 
