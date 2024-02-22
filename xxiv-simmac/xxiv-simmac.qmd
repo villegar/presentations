@@ -3,7 +3,7 @@ title: "<img src='images/danta.png' /><br/>API development with R"
 author: "Roberto Villegas-Diaz"
 institute: "University of Liverpool"
 abstract: "Application Programming Interfaces (APIs) are used extensively in a variety of fields; Using APIs you can extract information from local and remote servers (e.g., getting tweets from X -previously known as Twitter-), you can upload information to a remote server (e.g., update a dashboard with results from your research), you can interact with hardware (e.g., smart devices that are connected to the internet), and many other applications. The session will introduce you to APIs and what they can do, building up (with practical examples) to you writing your own API in R using the plumber (https://cran.r-project.org/package=plumber) package. Topics covered: What is an API? Where are APIs used? How can we use APIs in R? The plumber framework. Writing APIs with plumber in R."
-email: "R.Villegas-Diaz@liverpool.ac.uk"
+email: "r.villegas-diaz@liverpool.ac.uk"
 url: https://www.robertovillegas-diaz.com/presentations/xxiv-simmac
 bibliography: inst/references.bib
 csl: inst/elsevier-harvard2.csl
@@ -288,11 +288,22 @@ result$message$`reference-count`
 
 - [**DIY**] What is the current position of the International Space Station? Can you create a plot?
 
+::: {.callout-note}
+Could you please download the following zip file? This file contains all the scripts we will use for the hands-on sessions.
+
+[http://tinyurl.com/xxiv-simmac-api](http://tinyurl.com/xxiv-simmac-api)
+
+:::
+
 ---
 
 ## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=false}
 
-**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+**API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json) 
+
+::: {.aside} 
+**Reference R Script:** `1_api_who_is_on_the_ISS_now.R` 
+:::
 
 ```{.r code-line-numbers="1|"}
 response <- httr::GET("http://api.open-notify.org/astros.json")
@@ -309,6 +320,10 @@ Note the values for _Status_ and _Content-Type_! Both useful to determine whethe
 
 **API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
 
+::: {.aside} 
+**Reference R Script:** `1_api_who_is_on_the_ISS_now.R` 
+:::
+
 ```{.r code-line-numbers="|4|"}
 response <- httr::GET("http://api.open-notify.org/astros.json")
 
@@ -324,6 +339,10 @@ content$number
 ## [**Guided**] How many people are on the International Space Station right now? {.smaller auto-animate=true}
 
 **API call: ** [http://api.open-notify.org/astros.json](http://api.open-notify.org/astros.json)
+
+::: {.aside} 
+**Reference R Script:** `1_api_who_is_on_the_ISS_now.R` 
+:::
 
 ```{r}
 #| echo: true
@@ -405,6 +424,10 @@ contents$people |>
 ## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller auto-animate=true}
 
 **API call: ** [http://api.open-notify.org/iss-now.json](http://api.open-notify.org/iss-now.json)
+
+::: {.aside} 
+**Reference R Script:** `2_api_position_of_the_ISS_now.R` 
+:::
 
 ::: {.fragment .fade-in}
 
@@ -909,6 +932,10 @@ III. Write a plumber function to plot the population change of a user defined co
 ## {.smaller}
 ### I. Write a plumber function to use the Gapminder dataset to find the population of Costa Rica in 1982.
 
+::: {.aside} 
+**Reference R Scripts:** `4_pop_costa_rica_1982-client.R` and `4_pop_costa_rica_1982-client.R` 
+:::
+
 __Where do we start?__
 
 ::: {.incremental}
@@ -970,7 +997,6 @@ response
 # the content is in binary, so convert the response to an R data object
 content <- jsonlite::fromJSON(rawToChar(response$content))
 content
-
 ```
 
 
@@ -1004,6 +1030,9 @@ function() {
 ## {.smaller auto-animate=true}
 ### II. Write a plumber function to allow a user to find out the population of any country during any year in the Gapminder dataset.
 
+::: {.aside} 
+**Reference R Scripts:** `5_pop_any_country_any_year-client.R` and `5_pop_any_country_any_year-server.R` 
+:::
 
 __Where do we start?__
 
@@ -1129,6 +1158,9 @@ content
 ## {.smaller auto-animate=true}
 ### III. Write a plumber function to plot the population change of a user defined country.
 
+::: {.aside} 
+**Reference R Scripts:** `6_pop_change_any_country-client.R` and `6_pop_change_any_country-server.R` 
+:::
 
 __Where do we start?__
 
@@ -1253,7 +1285,7 @@ jsonlite::fromJSON(rawToChar(response$content)) |>
   
 - Security: [https://www.rplumber.io/articles/security.html](https://www.rplumber.io/articles/security.html)
 
-- Cheatsheet: [https://github.com/rstudio/cheatsheets/blob/main/plumber.pdf](https://github.com/rstudio/cheatsheets/blob/main/plumber.pdf)
+- Cheat-sheet: [https://github.com/rstudio/cheatsheets/blob/main/plumber.pdf](https://github.com/rstudio/cheatsheets/blob/main/plumber.pdf)
 
 # Thank you! 
 
@@ -1268,7 +1300,7 @@ insert_qr("mailto:r.villegas-diaz@liverpool.ac.uk?subject=XXIV SIMMAC",
 ```
 
 <!-- # Outline -->
-## Acknowledgments {.smaller}
+## Acknowledgements {.smaller}
 
 <!-- <div class='qr-image-div'> -->
 <center>
