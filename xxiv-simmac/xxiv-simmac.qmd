@@ -31,18 +31,6 @@ title-slide-attributes:
 ---
 
 # Outline
-<!-- ## Acknowledgment -->
-
-<!-- <div class='qr-image-div'> -->
-<!-- ![](images/groundswell_logo.png){width=920 fig-align='center'} -->
-<!-- ![](images/gw_uni_logos.png){width=900 fig-align='center'} -->
-<!-- </div> -->
-
-<!-- ::: {.aside} -->
-<!-- **Website:** [https://www.groundswelluk.org](https://www.groundswelluk.org) -->
-<!-- ::: -->
-
-<!-- # Outline -->
 
 ```{r helper_functions}
 #| echo: false
@@ -464,7 +452,7 @@ iss_position_tbl <- seq_len(10) |> # number of positions to extract
 
 ## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller .scrollable auto-animate=true}
 
-Here is a subset of the positions captured for 15 minutes, `seq_len(15 * 60)`:
+Here is a subset of the position of the ISS, capture over a period of 15 minutes, `seq_len(15 * 60)`:
 ```{r}
 iss_position_tbl <- readr::read_rds("data/iss_position_tbl.rds")
 dplyr::bind_rows(
@@ -515,6 +503,7 @@ iss_position_tbl |>
 
 ## [**DIY**] What is the current position of the International Space Station? Can you create a plot? {.smaller auto-animate=true}
 
+<center>
 ```{r}
 #| echo: false
 #| eval: true
@@ -535,6 +524,8 @@ iss_position_tbl |>
     icon = iss_icon
   )
 ```
+
+</center>
 
 # {.smaller}
 
@@ -1197,6 +1188,57 @@ content <- png::readPNG(response$content)
 grid::grid.raster(content, height = grid::unit(5, "in"))
 ```
 
+## {.smaller auto-animate=true}
+### III. Write a plumber function to plot the population change of a user defined country.
+
+3. Alternative, instead of returning a plot, we can return a data frame by updating the endpoint:
+
+```{.r code-line-numbers="|1,3|8|"}
+#* This function returns a data frame with the change in population for a `country`, as per the Gapminder dataset
+#* @param country String with a country in the Gapminder dataset: https://doi.org/10.7910/DVN/GJQNEQ.
+#* @get /pop_country_change_df
+function(country) {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == !!country) |>
+    dplyr::select(year, pop)
+  return(pop_tbl)
+}
+```
+
+## {.smaller auto-animate=true}
+### III. Write a plumber function to plot the population change of a user defined country.
+
+```{r}
+#| echo: true
+#| cache: false
+# encode URL / replace spaces, etc.
+url <- URLencode("http://127.0.0.1:1234/pop_country_change_df?country=Costa Rica")
+response <- httr::GET(url)
+response
+
+# the content is in binary, so convert the response to an R data object
+content <- jsonlite::fromJSON(rawToChar(response$content))
+tibble::as_tibble(content)
+```
+
+
+## {.smaller auto-animate=true .scrollable}
+### III. Write a plumber function to plot the population change of a user defined country.
+
+4. Alternative plot:
+
+```{r}
+#| echo: true
+response <- httr::GET(URLencode("http://127.0.0.1:1234/pop_country_change_df?country=Costa Rica"))
+jsonlite::fromJSON(rawToChar(response$content)) |>
+  tibble::as_tibble() |>
+  ggplot2::ggplot() +
+  ggplot2::geom_point(ggplot2::aes(x = year, y = pop / 1E6)) +
+  ggplot2::labs(x = "Year", y = "Population [millions]", title = "Population change of Costa Rica") +
+  ggplot2::theme_bw()
+```
+
+
 # Further considerations
 
 ## {.smaller .incremental}
@@ -1224,6 +1266,25 @@ insert_qr("mailto:r.villegas-diaz@liverpool.ac.uk?subject=XXIV SIMMAC",
           "r.villegas-diaz@liverpool.ac.uk",
           size = 400)
 ```
+
+<!-- # Outline -->
+## Acknowledgments {.smaller}
+
+<!-- <div class='qr-image-div'> -->
+<center>
+![](images/groundswell_logo.png){width=920 fig-align='center'}
+</center>
+
+In association with
+
+<center>
+![](images/gw_uni_logos.png){width=900 fig-align='center'}
+</center>
+<!-- </div> -->
+
+::: {.aside}
+**Website:** [https://www.groundswelluk.org](https://www.groundswelluk.org)
+:::
 
 # References
 

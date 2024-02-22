@@ -9,6 +9,12 @@
 # set plumber port
 options("plumber.port" = 1234)
 
+#* @apiTitle XXIV SIMMAC tutorial
+#* @apiDescription XXIV SIMMAC tutorial: API development with R by Roberto Villegas-Diaz
+#* @apiContact r.villegas-diaz@liverpool.ac.uk
+#* @apiVersion 0.0.1.9000
+NULL
+
 #* This function returns a message
 #* @get /hello_world
 function() {
@@ -79,4 +85,14 @@ function(country) {
   
   options(scipen=999) # Change number format on axes
   plot(pop_tbl, xlab = "Year", ylab = "Population")
+}
+
+#* This function returns a data frame with the change in population for a `country`, as per the Gapminder dataset
+#* @param country String with a country in the Gapminder dataset: https://doi.org/10.7910/DVN/GJQNEQ.
+#* @get /pop_country_change_df
+function(country) {
+  pop_tbl <- gapminder::gapminder |>
+    dplyr::filter(country == !!country) |>
+    dplyr::select(year, pop)
+  return(pop_tbl)
 }
