@@ -5,7 +5,7 @@ iss_position <- function() {
   Sys.sleep(1) # pause for 1 second
   # extract each field and convert to the appropriate data type
   tibble::tibble(
-    timestamp = as.POSIXct(content$timestamp),
+    timestamp = as.POSIXct(content$timestamp, origin = "1970-01-01"),
     longitude = as.numeric(content$iss_position$longitude),
     latitude = as.numeric(content$iss_position$latitude)
   )
