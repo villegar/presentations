@@ -5,7 +5,6 @@
 # Find out more about building APIs with Plumber here:
 #
 #    https://www.rplumber.io/
-
 # set plumber port
 options("plumber.port" = 1234)
 
@@ -26,6 +25,14 @@ function() {
 #* @get /square 
 function(a) {
   return(as.numeric(a) ^ 2)
+}
+
+#* Plot a histogram
+#* @serializer png
+#* @get /plot
+function() {
+  rand <- rnorm(100)
+  hist(rand)
 }
 
 #* This function returns the population of Costa Rica in 1982
@@ -83,7 +90,7 @@ function(country) {
     dplyr::filter(country == !!country) |>
     dplyr::select(year, pop)
   
-  options(scipen=999) # Change number format on axes
+  options(scipen = 999) # Change number format on axes
   plot(pop_tbl, xlab = "Year", ylab = "Population")
 }
 
