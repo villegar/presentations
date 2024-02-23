@@ -19,9 +19,10 @@ url <- URLencode("http://127.0.0.1:1234/pop_country_change?country=Costa Rica")
 response <- httr::GET(url)
 response
 
-# the content is in binary, so convert the response to an R data object
-content <- jsonlite::fromJSON(rawToChar(response$content))
+# read the contents with the png::readPNG function
+content <- png::readPNG(response$content)
 content
+grid::grid.raster(content, height = grid::unit(5, "in"))
 
 ################################################################################
 # Alternative, return data frame
